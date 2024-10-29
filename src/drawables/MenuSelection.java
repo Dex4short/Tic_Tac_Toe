@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 
+import interfaces.Action;
 import interfaces.DrawableClip;
 import res.Resource;
 
@@ -20,16 +21,18 @@ public class MenuSelection implements DrawableClip, AWTEventListener{
 	public MenuSelection() {
 		stroke = new BasicStroke(5);
 		selections = new Selection[]{
-			new Selection("Play"),
-			new Selection("Mode : 3x3"),
-			new Selection("About")
+			new ButtonPlay(),
+			new ButtonGrid(),
+			new ButtonMode(),
+			new ButtonChallenge(),
+			new ButtonAbout()
 		};
 		font = new Font("Calibri", Font.BOLD, 20);
 	}
 	@Override
 	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
 		selection_w = w/3;
-		selection_h = h/4;
+		selection_h = h/3;
 		selection_x = x + (w/2) - (selection_w/2);
 		selection_y = y + (int)(h*0.66) - (selection_h/2);
 		
@@ -61,14 +64,14 @@ public class MenuSelection implements DrawableClip, AWTEventListener{
 		}
 	}
 	
-	private class Selection extends Rectangle implements DrawableClip,AWTEventListener{
+	public abstract class Selection extends Rectangle implements DrawableClip,AWTEventListener,Action{
 		private static final long serialVersionUID = -7267045785208769956L;
 		private int arc=20;
-		private String selection_value;
+		private String text;
 		private boolean hover,pressed;
 
-		public Selection(String selection_value) {
-			this.selection_value = selection_value;
+		public Selection(String text) {
+			this.text = text;
 		}
 		@Override
 		public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
@@ -88,8 +91,8 @@ public class MenuSelection implements DrawableClip, AWTEventListener{
 			g2d.setFont(font);
 			g2d.setColor(Resource.main_color[2]);
 			g2d.drawString(
-					selection_value,
-					x + (w/2) - (g2d.getFontMetrics().stringWidth(selection_value)/2),
+					text,
+					x + (w/2) - (g2d.getFontMetrics().stringWidth(text)/2),
 					y + (h/2) + (g2d.getFontMetrics().getAscent()/2)
 			);
 		}
@@ -113,7 +116,7 @@ public class MenuSelection implements DrawableClip, AWTEventListener{
 					
 				case MouseEvent.MOUSE_CLICKED:
 					if(this.contains(e.getPoint()))	{
-						
+						onAction();
 					}
 					break;
 					
@@ -128,8 +131,88 @@ public class MenuSelection implements DrawableClip, AWTEventListener{
 				}
 			}
 		}
-		public void action() {
-			
+		public String getText() {
+			return text;
 		}
+		public void setText(String text) {
+			this.text = text;
+		}
+	}
+	
+	private class ButtonPlay extends Selection{
+		private static final long serialVersionUID = -4550683785373592173L;
+		
+		public ButtonPlay() {
+			super("Play");
+		}
+		@Override
+		public void onAction() {}
+		
+	}
+	private class SwappableButton extends Selection{
+		private static final long serialVersionUID = 8941139149007209602L;
+		private String text,swaps[];
+		private int selected;
+
+		public SwappableButton(String text, String swaps[]) {
+			super(text + " : " + swaps[0]);
+			this.text = text;
+			this.swaps = swaps;
+			selected = 0;
+		}
+		@Override
+		public void onAction() {
+			selected++;
+			if(selected == swaps.length) {
+				selected=0;
+			}
+			setText(text + " : " + swaps[selected]);
+		}
+	}
+	private class ButtonMode extends SwappableButton{
+		private static final long serialVersionUID = -4550683785373592173L;
+		
+		public ButtonMode() {
+			super("Mode", new String[] {"PvP","PvCom"});
+		}
+		@Override
+		public void onAction() {
+			super.onAction();
+		}
+		
+	}
+	private class ButtonGrid extends SwappableButton{
+		private static final long serialVersionUID = 4249264716971655694L;
+
+		public ButtonGrid() {
+			super("Grid", new String[] {"3x3", "6x6", "9x9" });
+		}
+		@Override
+		public void onAction() {
+			super.onAction();
+		}
+		
+	}
+	private class ButtonChallenge extends SwappableButton{
+		private static final long serialVersionUID = 1528737073575125893L;
+		
+		public ButtonChallenge() {
+			super("Challenge", new String[] {"None", "Fast Play", "Bomb Attack"});
+		}
+		@Override
+		public void onAction() {
+			super.onAction();
+		}
+	}
+	private class ButtonAbout extends Selection{
+		private static final long serialVersionUID = -7117907692472680449L;
+
+		public ButtonAbout() {
+			super("About");
+		}
+
+		@Override
+		public void onAction() {}
+		
 	}
 }

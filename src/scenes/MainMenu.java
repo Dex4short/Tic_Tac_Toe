@@ -12,6 +12,7 @@ import interfaces.Scene;
 public class MainMenu implements Scene{
 	private int w,h;
 	private DrawableClip background, title, menu_selection;
+	private Scene next_scene;
 
 	public MainMenu() {
 		background     = new MenuBackground();
