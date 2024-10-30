@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import drawables.TicTacToeBoard;
+import enums.Symbol;
 import extras.Metrics;
 import interfaces.Scene;
 import objects.GamePlay;
@@ -19,7 +20,12 @@ public class PlayScene implements Scene{
 	public PlayScene(GamePlay game_play) {
 		this.game_play = game_play;
 		
-		ticTacToe_board = new TicTacToeBoard(game_play.getGrid_type());
+		ticTacToe_board = new TicTacToeBoard(game_play.getGrid_type()) {
+			@Override
+			public void onCommitMove(int row, int col, Symbol symbol) {
+				nextSymbol();
+			}
+		};
 		
 	}
 	@Override
