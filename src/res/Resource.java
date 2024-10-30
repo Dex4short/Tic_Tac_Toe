@@ -1,6 +1,7 @@
 package res;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -14,6 +15,9 @@ public class Resource {
 			new Color(  8, 97, 105),//blue-green
 			Color.white,			//white
 			new Color(189, 40,  40)//dark peach
+	};
+	public static Font font[] = {
+			new Font("Calibri", Font.BOLD, 16)
 	};
 
 	public Resource() {}
