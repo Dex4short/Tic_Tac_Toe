@@ -11,10 +11,10 @@ import objects.GamePlay;
 import res.Resource;
 
 public class PlayScene implements Scene{
+	private Rectangle rect;
+	private int board_size;
 	private GamePlay game_play;
 	private TicTacToeBoard ticTacToe_board;
-	private int board_size;
-	private Rectangle rect;
 
 	public PlayScene(GamePlay game_play) {
 		this.game_play = game_play;
@@ -41,7 +41,7 @@ public class PlayScene implements Scene{
 	}
 	@Override
 	public void eventDispatched(AWTEvent event) {
-		
+		ticTacToe_board.eventDispatched(event);
 	}
 	@Override
 	public Scene next() {

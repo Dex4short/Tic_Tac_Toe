@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 
+import default_package.Game;
 import enums.Challenge;
 import enums.GameMode;
 import enums.GridType;
@@ -52,7 +53,7 @@ public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 		drawSelections(g2d, selection_x, selection_y, selection_w, selection_h);
 	}
 	@Override
-	public void eventDispatched(AWTEvent event) {
+	public void eventDispatched(AWTEvent event) {		
 		for(Selection selection: selections) {
 			selection.eventDispatched(event);
 		}
