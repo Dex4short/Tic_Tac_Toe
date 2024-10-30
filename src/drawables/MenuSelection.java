@@ -28,6 +28,7 @@ public class MenuSelection implements DrawableClip, AWTEventListener{
 			new ButtonAbout()
 		};
 		font = new Font("Calibri", Font.BOLD, 20);
+		
 	}
 	@Override
 	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {

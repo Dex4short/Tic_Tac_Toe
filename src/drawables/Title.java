@@ -68,6 +68,7 @@ public class Title implements DrawableClip, AWTEventListener{
 		g2d.translate(-(x+((w/2)-(title_w/2))), -(y+(h/3)));
 		
 		g2d.setClip(x, y ,w , h);
+		
 	}
 	@Override
 	public void eventDispatched(AWTEvent event) {

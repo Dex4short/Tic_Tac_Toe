@@ -1,6 +1,5 @@
 package drawables;
 
-import java.awt.AWTEvent;
 import java.awt.Graphics2D;
 
 import interfaces.DrawableClip;
@@ -16,7 +15,7 @@ public class LoadingScreen implements DrawableClip{
 	}
 	@Override
 	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
-		
+		//TODO
 	}
 
 }
