@@ -5,28 +5,56 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import drawables.TicTacToeBoard;
-import enums.Symbol;
+import enums.GameMode;
 import extras.Metrics;
 import interfaces.Scene;
+import objects.AI;
 import objects.GamePlay;
+import objects.Human;
+import objects.Player;
 import res.Resource;
 
 public class PlayScene implements Scene{
 	private Rectangle rect;
-	private int board_size;
-	private GamePlay game_play;
+	private int board_size, next_turn;
 	private TicTacToeBoard ticTacToe_board;
+	private Player player[];
 
-	public PlayScene(GamePlay game_play) {
-		this.game_play = game_play;
-		
+	public PlayScene(GamePlay game_play) {		
 		ticTacToe_board = new TicTacToeBoard(game_play.getGrid_type()) {
 			@Override
-			public void onCommitMove(int row, int col, Symbol symbol) {
-				nextSymbol();
+			public void onNext(int next) {
+				next_turn = next;
+				
+				if(player[next_turn] instanceof AI) {
+					((AI)player[next_turn]).onAction();//triger's Ai to make an action
+				}
 			}
 		};
 		
+		player = new Player[] {
+			new Human("Player 1") {
+				@Override
+				public TicTacToeBoard getTacToeBoard() {
+					return ticTacToe_board;
+				}
+			},
+			new Human("Player 2") {
+				@Override
+				public TicTacToeBoard getTacToeBoard() {
+					return ticTacToe_board;
+				}
+			}
+		};
+		
+		if(game_play.getGame_mode() == GameMode.PvCom) {
+			player[1] = new AI() {
+				@Override
+				public TicTacToeBoard getTacToeBoard() {
+					return ticTacToe_board;
+				}
+			};
+		}
 	}
 	@Override
 	public void paint(Graphics2D g2d) {
@@ -46,8 +74,10 @@ public class PlayScene implements Scene{
 		
 	}
 	@Override
-	public void eventDispatched(AWTEvent event) {
-		ticTacToe_board.eventDispatched(event);
+	public void eventDispatched(AWTEvent event) {		
+		if(player[next_turn] instanceof Human) {
+			((Human)player[next_turn]).eventDispatched(event);//Enables users to make an action through event input
+		}
 	}
 	@Override
 	public Scene next() {

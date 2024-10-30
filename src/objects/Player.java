@@ -1,6 +1,8 @@
 package objects;
 
-public class Player {
+import drawables.TicTacToeBoard;
+
+public abstract class Player {
 	private String name;
 
 	public Player(String name) {
@@ -12,4 +14,5 @@ public class Player {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public abstract TicTacToeBoard getTacToeBoard();
 }
