@@ -16,30 +16,26 @@ public class Game extends JPanel implements Runnable{
 	private Scene scene;
 	private Graphics2D g2d;
 	private Thread gameThread;
-	private volatile boolean running = false;
+	private volatile boolean running;
 
 	public Game() {
+		running = false;
+		
 		//Loading Screen
-		loading_screen = new LoadingScreen("Loading...") {
-			@Override
-			public void onLoad() {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		};
+		loading_screen = new LoadingScreen("Loading...");
 		
 		//Game Introduction
 		scene = (Scene)new Intro() {
 			@Override
 			public Scene next() {
 				Scene next_scene = super.next();
+				
 				if(next_scene != null) {
-					loading_screen.load();
+					loading_screen.load(null);
+					scene = next_scene;
 				}
-				return next_scene;
+				
+				return null;
 			}
 		};
 		
@@ -64,12 +60,14 @@ public class Game extends JPanel implements Runnable{
 		scene.paint(g2d);
 		if(scene.next() != null) scene = scene.next();
 		
-		if((!(scene instanceof Intro)) && (loading_screen.isCurtainsMoving() || !loading_screen.isCurtainsOpen())) {
+		if(loading_screen.isLoading()) {
 			loading_screen.drawClip(g2d, 0, 0, getWidth(), getHeight());
 		}
 	}
 	@Override
 	protected void processEvent(AWTEvent e) {
+		if(loading_screen.isLoading()) return;
+		
 		scene.eventDispatched(e);
 		super.processEvent(e);
 	}

@@ -3,14 +3,15 @@ package drawables;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import extras.Timing;
 import interfaces.DrawableClip;
 import res.Resource;
 
-public abstract class LoadingScreen implements DrawableClip{
+public class LoadingScreen implements DrawableClip{
 	private String text;
 	private Curtain curtains[];
 	private int c;
-	private boolean curtains_open, curtains_moving;
+	private boolean curtains_open, curtains_moving, isLoading;
 	
 	public LoadingScreen(String text) {
 		this.text = text;
@@ -44,6 +45,7 @@ public abstract class LoadingScreen implements DrawableClip{
 					if(C == curtains.length-1) {
 						curtains_open = true;
 						curtains_moving = false;
+						isLoading = false;
 					}
 				}
 				@Override
@@ -76,7 +78,7 @@ public abstract class LoadingScreen implements DrawableClip{
 		);
 		
 	}
-	public void open() {
+	public void open() {		
 		curtains[0].open();
 		curtains_moving = true;
 	}
@@ -90,22 +92,21 @@ public abstract class LoadingScreen implements DrawableClip{
 	public boolean isCurtainsMoving() {
 		return curtains_moving;
 	}
-	public void load() {
+	public void load(Runnable runnable) {
+		isLoading = true;
 		close();
 		
-		Thread thread = new Thread() {
+		 new Thread() {
+			@Override
 			public void run() {
+				while(curtains_moving && curtains_open) new Timing().sleep(1000);	//waiting for the animation
 				
-				while(curtains_moving && curtains_open) loading();
-				
-				onLoad();
+				if(runnable != null) runnable.run();
+
+				new Timing().sleep(1000); //waiting for the animation
 				open();
-			};
-		};
-		thread.start();
-	}
-	public void loading() {
-		setText(text);
+			}
+		}.start();
 	}
 	public void setText(String text) {
 		this.text = text;
@@ -113,7 +114,9 @@ public abstract class LoadingScreen implements DrawableClip{
 	public String getText() {
 		return text;
 	}
-	public abstract void onLoad();
+	public boolean isLoading() {
+		return isLoading;
+	}
 
 	private abstract class Curtain implements DrawableClip{
 		private int r, g, b, a, tick;
@@ -132,6 +135,7 @@ public abstract class LoadingScreen implements DrawableClip{
 		public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {			
 			if(move) {
 				tick--;
+				
 				if(tick<=0) {
 					if(open) {
 						if(a>0) {
@@ -139,10 +143,6 @@ public abstract class LoadingScreen implements DrawableClip{
 								right().open();
 							}
 							a -= 32;
-						}
-						else {
-							move = false;
-							opened();
 						}
 					}
 					else {
@@ -152,10 +152,6 @@ public abstract class LoadingScreen implements DrawableClip{
 							}
 							a += 32;
 						}
-						else{
-							move = false;
-							closed();
-						}
 					}
 					
 					tick = 4;
@@ -163,9 +159,13 @@ public abstract class LoadingScreen implements DrawableClip{
 				
 				if(a<0) {
 					a=0;
+					move = false;
+					opened();
 				}
 				else if(a>255) {
 					a=255;
+					move = false;
+					closed();
 				}
 			}
 

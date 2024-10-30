@@ -22,8 +22,12 @@ public class MainMenu implements Scene{
 		menu_selection = new MenuSelection() {
 			@Override
 			public void onPlay(GamePlay game_play) {
-				Game.loading_screen.load();
-				next_scene = new PlayScene(game_play);
+				Game.loading_screen.load(new Runnable() {
+					@Override
+					public void run() {
+						next_scene = new PlayScene(game_play);
+					}
+				});
 			}
 			@Override
 			public void onAbout() {
@@ -42,7 +46,7 @@ public class MainMenu implements Scene{
 	}
 	@Override
 	public Scene next() {
-		return null;
+		return next_scene;
 	}
 	@Override
 	public void eventDispatched(AWTEvent event) {

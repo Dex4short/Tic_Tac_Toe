@@ -8,6 +8,7 @@ import java.awt.Shape;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ComponentEvent;
 
+import extras.Metrics;
 import extras.Shapes;
 import interfaces.DrawableClip;
 import res.Resource;
@@ -28,7 +29,7 @@ public class Title implements DrawableClip, AWTEventListener{
 	@Override
 	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
 		if(resized) {
-			font_size  = ((int)Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2))) / 8;
+			font_size  = Metrics.rectLength(w, h) / 8;
 			font       = new Font("Kreativ", Font.BOLD, (int)(font_size));
 
 			g2d.setFont(font);
