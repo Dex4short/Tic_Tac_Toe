@@ -249,7 +249,9 @@ public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 		}
 
 		@Override
-		public void onAction() {}
+		public void onAction() {
+			onAbout();
+		}
 		
 	}
 }

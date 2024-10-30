@@ -3,6 +3,7 @@ package drawables;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import extras.Timing;
 import interfaces.DrawableClip;
 import res.Resource;
 
@@ -93,24 +94,19 @@ public class LoadingScreen implements DrawableClip{
 	public void load(Runnable runnable) {
 		close();
 		
-		Thread thread = new Thread() {
+		 new Thread() {
 			@Override
 			public void run() {
-				while(curtains_moving && curtains_open) loading(); //waiting for the animation
+				while(curtains_moving && curtains_open) {
+					new Timing().sleep(1000);
+					//waiting for the animation
+				}; 
 				runnable.run();
-				
-				try {
-					Thread.sleep(1000);//pause for a second
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+
+				new Timing().sleep(1000); //waiting for the animation
 				open();
 			}
-		};
-		thread.start();
-	}
-	public void loading() {
-		setText(text);
+		}.start();
 	}
 	public void setText(String text) {
 		this.text = text;
