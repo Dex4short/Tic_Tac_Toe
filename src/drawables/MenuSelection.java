@@ -8,15 +8,20 @@ import java.awt.Rectangle;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 
+import enums.Challenge;
+import enums.GameMode;
+import enums.GridType;
 import interfaces.Action;
 import interfaces.DrawableClip;
+import objects.GamePlay;
 import res.Resource;
 
-public class MenuSelection implements DrawableClip, AWTEventListener{
+public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 	private int selection_x, selection_y,selection_w, selection_h, selection_arc=20, s;
 	private Selection selections[];
 	private BasicStroke stroke;
 	private Font font;
+	private GamePlay game_play;
 	
 	public MenuSelection() {
 		stroke = new BasicStroke(5);
@@ -28,7 +33,7 @@ public class MenuSelection implements DrawableClip, AWTEventListener{
 			new ButtonAbout()
 		};
 		font = new Font("Calibri", Font.BOLD, 20);
-		
+		game_play = new GamePlay();
 	}
 	@Override
 	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
@@ -52,6 +57,8 @@ public class MenuSelection implements DrawableClip, AWTEventListener{
 			selection.eventDispatched(event);
 		}
 	}
+	public abstract void onPlay(GamePlay game_play);
+	public abstract void onAbout();
 	
 	private void drawSelections(Graphics2D g2d, int x, int y, int w, int h) {
 		for(s=0; s<selections.length; s++) {
@@ -147,7 +154,9 @@ public class MenuSelection implements DrawableClip, AWTEventListener{
 			super("Play");
 		}
 		@Override
-		public void onAction() {}
+		public void onAction() {
+			onPlay(game_play);
+		}
 		
 	}
 	private class SwappableButton extends Selection{
@@ -169,6 +178,9 @@ public class MenuSelection implements DrawableClip, AWTEventListener{
 			}
 			setText(text + " : " + swaps[selected]);
 		}
+		public String getSelected() {
+			return swaps[selected];
+		}
 	}
 	private class ButtonMode extends SwappableButton{
 		private static final long serialVersionUID = -4550683785373592173L;
@@ -179,6 +191,12 @@ public class MenuSelection implements DrawableClip, AWTEventListener{
 		@Override
 		public void onAction() {
 			super.onAction();
+			if(getSelected().equals("PvP")) {
+				game_play.setGame_mode(GameMode.PvP);
+			}
+			else if(getSelected().equals("PvCom")) {
+				game_play.setGame_mode(GameMode.PvCom);
+			}
 		}
 		
 	}
@@ -191,6 +209,15 @@ public class MenuSelection implements DrawableClip, AWTEventListener{
 		@Override
 		public void onAction() {
 			super.onAction();
+			if(getSelected().equals("3x3")) {
+				game_play.setGrid_type(GridType.Grid_3x3);
+			}
+			else if(getSelected().equals("6x6")) {
+				game_play.setGrid_type(GridType.Grid_6x6);
+			}
+			else if(getSelected().equals("9x9")) {
+				game_play.setGrid_type(GridType.Grid_9x9);
+			}
 		}
 		
 	}
@@ -203,6 +230,15 @@ public class MenuSelection implements DrawableClip, AWTEventListener{
 		@Override
 		public void onAction() {
 			super.onAction();
+			if(getSelected().equals("None")) {
+				game_play.setChallenge(Challenge.None);
+			}
+			else if(getSelected().equals("Fast Play")) {
+				game_play.setChallenge(Challenge.FastPLay);
+			}
+			else if(getSelected().equals("Bomb Attack")) {
+				game_play.setChallenge(Challenge.BombAttack);
+			}
 		}
 	}
 	private class ButtonAbout extends Selection{

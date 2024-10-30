@@ -5,28 +5,53 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
+import drawables.LoadingScreen;
 import extras.Settings;
 import interfaces.Scene;
 import scenes.Intro;
 
 public class Game extends JPanel implements Runnable{
 	private static final long serialVersionUID = -1530919121054777204L;
+	public static LoadingScreen loading_screen;
 	private Scene scene;
 	private Graphics2D g2d;
 	private Thread gameThread;
 	private volatile boolean running = false;
 
 	public Game() {
-		//Game intro
-		scene = (Scene)new Intro();
-		//Game Loop here
-		startGameLoop();
-				
+		//Loading Screen
+		loading_screen = new LoadingScreen("Loading...") {
+			@Override
+			public void onLoad() {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		
+		//Game Introduction
+		scene = (Scene)new Intro() {
+			@Override
+			public Scene next() {
+				Scene next_scene = super.next();
+				if(next_scene != null) {
+					loading_screen.load();
+				}
+				return next_scene;
+			}
+		};
+		
+		//Enabling Mouse and Window Events
 		enableEvents(
 				AWTEvent.MOUSE_EVENT_MASK |				//for mouse clicked, pressed, released, entered, exited
 				AWTEvent.MOUSE_MOTION_EVENT_MASK |		//for mouse dragged and moved
 				AWTEvent.COMPONENT_EVENT_MASK			//for resize event
 		);
+		
+		//Game Loop here
+		startGameLoop();
 	}
 	
 	@Override
@@ -38,6 +63,10 @@ public class Game extends JPanel implements Runnable{
 		//render current scene
 		scene.paint(g2d);
 		if(scene.next() != null) scene = scene.next();
+		
+		if((!(scene instanceof Intro)) && (loading_screen.isCurtainsMoving() || !loading_screen.isCurtainsOpen())) {
+			loading_screen.drawClip(g2d, 0, 0, getWidth(), getHeight());
+		}
 	}
 	@Override
 	protected void processEvent(AWTEvent e) {
@@ -45,12 +74,10 @@ public class Game extends JPanel implements Runnable{
 		super.processEvent(e);
 	}
 	private void startGameLoop() {
-			
-			running = true;
-			gameThread = new Thread(this);
-			gameThread.start();
-			
-		}
+		running = true;
+		gameThread = new Thread(this);
+		gameThread.start();
+	}
 	//wa pa nagamit ni nga part dex kaw ray bahala utilize ani 
 	//or e ayaw nalang gud gamita kinsa raman sab ni 
 	private void stopGameLoop() {
