@@ -112,25 +112,25 @@ public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 				
 				switch(e.getID()) {
 				case MouseEvent.MOUSE_PRESSED:
-					if(this.contains(e.getPoint())) {
+					if(getBounds().contains(e.getPoint())) {
 						pressed = true;
 					}
 					break;
 					
 				case MouseEvent.MOUSE_RELEASED:
-					if(this.contains(e.getPoint())) {
+					if(getBounds().contains(e.getPoint())) {
 						pressed = false;
 					}
 					break;
 					
 				case MouseEvent.MOUSE_CLICKED:
-					if(this.contains(e.getPoint()))	{
+					if(getBounds().contains(e.getPoint()))	{
 						onAction();
 					}
 					break;
 					
 				case MouseEvent.MOUSE_MOVED:
-					if(this.contains(e.getPoint())) {
+					if(getBounds().contains(e.getPoint())) {
 						hover = true;
 					}
 					else {

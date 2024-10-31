@@ -7,6 +7,7 @@ import drawables.TicTacToeBox;
 import enums.Symbol;
 import extras.Timing;
 import interfaces.Action;
+import scenes.PlayScene;
 
 public abstract class AI extends Player implements Action{
 
@@ -43,7 +44,9 @@ public abstract class AI extends Player implements Action{
 		
 		new Thread() {
 			public void run() {
-				new Timing().sleep(1000);//wait for the ai to move
+				while(PlayScene.paused) {
+					new Timing().sleep(1000);//wait for the ai to make a move
+				}
 				makeMove();
 				
 				board.next();//an obligation of Ai to declare next() to switch turns.

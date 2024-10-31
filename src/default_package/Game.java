@@ -12,11 +12,12 @@ import scenes.Intro;
 
 public class Game extends JPanel implements Runnable{
 	private static final long serialVersionUID = -1530919121054777204L;
-	public static LoadingScreen loading_screen;
 	private Scene scene;
 	private Graphics2D g2d;
 	private Thread gameThread;
 	private volatile boolean running;
+
+	public static LoadingScreen loading_screen;
 
 	public Game() {
 		running = false;

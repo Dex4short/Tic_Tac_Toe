@@ -1,35 +1,32 @@
 package drawables;
 
-import java.awt.AWTEvent;
 import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.event.AWTEventListener;
-import java.awt.event.ComponentEvent;
 
 import extras.Metrics;
 import extras.Shapes;
 import interfaces.DrawableClip;
 import res.Resource;
 
-public class Title implements DrawableClip, AWTEventListener{
+public class Title implements DrawableClip{
 	private int title_w, title_h, font_size, bx, by, bar_size, bar_gap=1 ,bar_arc=5, bar_n=0;
 	private String title;
 	private Font font;
 	private Shape glyph;
 	private BasicStroke stroke;
-	private boolean resized;
+	private boolean execute_once;
 
 	public Title() {
 		title = "Tic Tac Toe";
 		stroke = new BasicStroke(5);
-		resized = true;
+		execute_once = true;
 	}
 	@Override
 	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
-		if(resized) {
-			font_size  = Metrics.rectLength(w, h) / 8;
+		if(execute_once) {
+			font_size  = Metrics.rectLength(800, 600) / 8;
 			font       = new Font("Kreativ", Font.BOLD, (int)(font_size));
 
 			g2d.setFont(font);
@@ -38,7 +35,7 @@ public class Title implements DrawableClip, AWTEventListener{
 			bar_size = font_size/5;
 			glyph    = Shapes.glyph(title, g2d);
 			
-			resized = false;
+			execute_once = false;
 		}
 		else {
 			g2d.setFont(font);
@@ -71,14 +68,4 @@ public class Title implements DrawableClip, AWTEventListener{
 		g2d.setClip(x, y ,w , h);
 		
 	}
-	@Override
-	public void eventDispatched(AWTEvent event) {
-		if(event instanceof ComponentEvent) {
-			ComponentEvent e = (ComponentEvent)event;
-			if(e.getID() == ComponentEvent.COMPONENT_RESIZED) {
-				resized = true;
-			}
-		}
-	}
-
 }
