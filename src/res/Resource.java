@@ -17,7 +17,10 @@ public class Resource {
 			new Color(189, 40,  40)//dark peach
 	};
 	public static Font font[] = {
-			new Font("Calibri", Font.BOLD, 16)
+			new Font("Calibri", Font.BOLD, 16),
+			new Font("Calibri", Font.BOLD, 24),
+			new Font("Calibri", Font.BOLD, 32),
+			new Font("Calibri", Font.BOLD, 64)
 	};
 
 	public Resource() {}
