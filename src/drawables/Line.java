@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 
 import interfaces.Direction;
 import interfaces.Drawable;
+import interfaces.Orientation;
 import res.Resource;
 
 public class Line implements Drawable{
@@ -16,6 +17,19 @@ public class Line implements Drawable{
 		boxes = new TicTacToeBox[3];
 		for(int i=0; i<boxes.length; i++) {
 			boxes[i] = board.getBox(row + (direction.x_iterate*i), col + (direction.y_iterate*i));
+			boxes[i].setMark(true);
+		}
+		
+		shadow = new Color(0,0,0,32);
+	}	
+	public Line(TicTacToeBoard board, int row, int col, Orientation orientation) {
+		boxes = new TicTacToeBox[] {
+				board.getBox(row + orientation.x1, col + orientation.y1),
+				board.getBox(row, col),
+				board.getBox(row + orientation.x2, col + orientation.y2)
+		};
+		
+		for(int i=0; i<boxes.length; i++) {
 			boxes[i].setMark(true);
 		}
 		

@@ -10,6 +10,7 @@ import enums.Symbol;
 import extras.Timing;
 import interfaces.Direction;
 import interfaces.DrawableClip;
+import interfaces.Orientation;
 
 public abstract class TicTacToeBoard implements DrawableClip{
 	private final Symbol symbols[] = {Symbol.X, Symbol.O};
@@ -112,14 +113,17 @@ public abstract class TicTacToeBoard implements DrawableClip{
 		
 		for(int r=0; r<rows; r++) {
 			for(int c=0; c<cols; c++) {
+				if(getBox(r, c).isMarked()) continue;
+				
 				for(Direction direction: Direction.values()) {
-					if(getBox(r, c).isMarked()) continue;
-
-					System.out.println("checking for " + symbol.toString());
 					if(check_line(0, r, c, symbol, direction)) {
 						lines.add(new Line(this , r, c, direction));
-						
-						System.out.println("new line added");
+					}
+				}
+				
+				for(Orientation orientation: Orientation.values()) {
+					if(check_line(0, r, c, symbol, orientation)) {
+						lines.add(new Line(this , r, c, orientation));
 					}
 				}
 			}
@@ -134,6 +138,22 @@ public abstract class TicTacToeBoard implements DrawableClip{
 		
 		if(getBox(r, c).getSymbol() == symbol) {
 			return check_line(n+1, r+direction.x_iterate, c+direction.y_iterate, symbol, direction);
+		}
+		else {
+			return false;
+		}
+	}
+	private boolean check_line(int n, int r, int c, Symbol symbol, Orientation orientation) {
+		if(n==2) return true;
+		
+		if(getBox(r, c) == null) return false;
+		
+		if(getBox(r, c).getSymbol() == symbol) {
+			return 
+				check_line(n+1, r + orientation.x1, c + orientation.y1, symbol, orientation) 
+				&&
+				check_line(n+1, r + orientation.x2, c + orientation.y2, symbol, orientation)
+			;
 		}
 		else {
 			return false;
