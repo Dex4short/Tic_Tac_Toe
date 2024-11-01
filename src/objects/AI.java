@@ -44,8 +44,14 @@ public abstract class AI extends Player implements Action{
 		
 		new Thread() {
 			public void run() {
-				while(PlayScene.paused) {
-					new Timing().sleep(1000);//wait for the ai to make a move
+				new Timing().sleep(1000);//wait for the Ai to make a move
+				
+				while(PlayScene.paused) {//the Ai will wait for the game to resume
+					new Timing().sleep(1000);
+					
+					if(PlayScene.game_over) {//if the player returns to main menu
+						return;
+					}
 				}
 				makeMove();
 				
@@ -60,13 +66,37 @@ public abstract class AI extends Player implements Action{
 		int row = r.nextInt(board.getRows());
 		int col = r.nextInt(board.getColumns());
 		
-		while(board.getBox(row, col).getSymbol() != null) {
-			row = r.nextInt(board.getRows());
-			col = r.nextInt(board.getColumns());
+		TicTacToeBox 
+		next_box = board.getBox(row, col), 
+		last_box = null;
+		
+		next_box.setHighlighted(true);
+		last_box = next_box;
+		while(next_box.getSymbol() != null) {
+			if(!PlayScene.paused) {
+				last_box.setHighlighted(false);
+				
+				row = r.nextInt(board.getRows());
+				col = r.nextInt(board.getColumns());
+				
+				next_box = board.getBox(row, col);
+				next_box.setHighlighted(true);
+
+				last_box = next_box;
+			}
+			else if(PlayScene.game_over) {
+				return;
+			}
+			new Timing().sleep(1000);
 		}
 		
 		Symbol symbol = board.getNextSymbol();
-		board.getBox(row, col).setSymbol(symbol);
+		next_box.setSymbol(symbol);
+
+		new Timing().sleep(1000);
+		next_box.setHighlighted(false);
+		if(last_box != null) last_box.setHighlighted(false);
+		
 		System.out.println("Ai marked " + symbol.toString() + " at row: " + row + ", col: " + col + ".");
 	}
 }

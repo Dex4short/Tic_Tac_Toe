@@ -8,7 +8,6 @@ import java.awt.Rectangle;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 
-import default_package.Game;
 import enums.Challenge;
 import enums.GameMode;
 import enums.GridType;

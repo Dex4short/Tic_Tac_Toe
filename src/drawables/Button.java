@@ -28,7 +28,7 @@ public abstract class Button extends Rectangle implements DrawableClip, AWTEvent
 		setTextColor(Resource.main_color[2]);
 		
 		stroke = new BasicStroke(3);
-		arc = 5;
+		arc = 10;
 	}
 	@Override
 	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {

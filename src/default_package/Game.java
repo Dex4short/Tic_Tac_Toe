@@ -45,12 +45,8 @@ public class Game extends JPanel implements Runnable{
 				AWTEvent.MOUSE_EVENT_MASK |				//for mouse clicked, pressed, released, entered, exited
 				AWTEvent.MOUSE_MOTION_EVENT_MASK |		//for mouse dragged and moved
 				AWTEvent.COMPONENT_EVENT_MASK			//for resize event
-		);
-		
-		//Game Loop here
-		startGameLoop();
+		);		
 	}
-	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -72,14 +68,12 @@ public class Game extends JPanel implements Runnable{
 		scene.eventDispatched(e);
 		super.processEvent(e);
 	}
-	private void startGameLoop() {
+	public void start() {
 		running = true;
 		gameThread = new Thread(this);
 		gameThread.start();
 	}
-	//wa pa nagamit ni nga part dex kaw ray bahala utilize ani 
-	//or e ayaw nalang gud gamita kinsa raman sab ni 
-	private void stopGameLoop() {
+	public void stop() {
 		running = false;
 		try {
 			gameThread.join();
@@ -94,7 +88,6 @@ public class Game extends JPanel implements Runnable{
 		
 		while(running) {
 			long startTime = System.nanoTime();
-			
 			
 			repaint();
 			
