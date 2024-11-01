@@ -19,7 +19,7 @@ public class TicTacToeBox  extends Rectangle implements DrawableClip{
 	private Color color, highlight;
 	private BasicStroke stroke;
 	private int alpha, alpha_iterator, arc;
-	private boolean running;
+	private boolean running, mark;
 	
 	public TicTacToeBox() {
 		symbol = null;
@@ -92,5 +92,10 @@ public class TicTacToeBox  extends Rectangle implements DrawableClip{
 	public Symbol getSymbol() {
 		return symbol;
 	}
-
+	public boolean isMarked() {
+		return mark;
+	}
+	public void setMark(boolean mark) {
+		this.mark = mark;
+	}
 }

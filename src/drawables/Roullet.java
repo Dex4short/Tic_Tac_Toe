@@ -104,7 +104,11 @@ public abstract class Roullet implements DrawableClip{
 		return selected_pie.color;
 	}
 	public Color getColor2() {
-		return color[new Random().nextInt(color.length)];
+		Color color2 = color[new Random().nextInt(color.length)];
+		while(color2 == getColor1()) {
+			color2 = color[new Random().nextInt(color.length)];
+		}
+		return color2;
 	}
 	
 	public abstract void onRoulletStopped();
