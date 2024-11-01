@@ -13,13 +13,13 @@ import extras.RGBA;
 import interfaces.DrawableClip;
 import res.Resource;
 
-public abstract class TicTacToeBox  extends Rectangle implements DrawableClip{
+public class TicTacToeBox  extends Rectangle implements DrawableClip{
 	private static final long serialVersionUID = 5682340612501179503L;
 	private Symbol symbol;
 	private Color color, highlight;
 	private BasicStroke stroke;
 	private int alpha, alpha_iterator, arc;
-	private boolean running, mark;
+	private boolean running;
 	
 	public TicTacToeBox() {
 		symbol = null;
@@ -90,13 +90,4 @@ public abstract class TicTacToeBox  extends Rectangle implements DrawableClip{
 	public Symbol getSymbol() {
 		return symbol;
 	}
-	public boolean isMarked() {
-		return mark;
-	}
-	public void setMark(boolean mark) {
-		this.mark = mark;
-		onMarked(isMarked());
-	}
-	
-	public abstract void onMarked(boolean isMarked);
 }

@@ -123,12 +123,13 @@ public class PlayScene implements Scene{
 		ticTacToe_board = new TicTacToeBoard(game_play.getGrid_type()) {
 			@Override
 			public void onNext(int next) {
+				System.out.println("completed = " + isBoardCompleted());
 				if(!isBoardCompleted()) {
 					next_turn = next;
 					player[next_turn].myTurn(true);
 				}
 				else {
-					gameOver();					
+					gameOver();				
 				}
 			}
 			@Override

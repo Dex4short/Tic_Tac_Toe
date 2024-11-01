@@ -17,9 +17,7 @@ public class Line implements Drawable{
 		boxes = new TicTacToeBox[3];
 		for(int i=0; i<boxes.length; i++) {
 			boxes[i] = board.getBox(row + (direction.x_iterate*i), col + (direction.y_iterate*i));
-			boxes[i].setMark(true);
 		}
-		
 		shadow = new Color(0,0,0,32);
 	}	
 	public Line(TicTacToeBoard board, int row, int col, Orientation orientation) {
@@ -27,12 +25,7 @@ public class Line implements Drawable{
 				board.getBox(row + orientation.x1, col + orientation.y1),
 				board.getBox(row, col),
 				board.getBox(row + orientation.x2, col + orientation.y2)
-		};
-		
-		for(int i=0; i<boxes.length; i++) {
-			boxes[i].setMark(true);
-		}
-		
+		};		
 		shadow = new Color(0,0,0,32);
 	}
 	@Override
@@ -41,10 +34,10 @@ public class Line implements Drawable{
 		
 		g2d.setColor(shadow);
 		g2d.drawLine(
-				boxes[0].x + (boxes[0].width/2) - 4,
-				boxes[0].y + (boxes[0].height/2) + 4,
-				boxes[2].x + (boxes[2].width/2) - 4,
-				boxes[2].y + (boxes[2].height/2) + 4
+				boxes[0].x + (boxes[0].width/2) - 3,
+				boxes[0].y + (boxes[0].height/2) + 6,
+				boxes[2].x + (boxes[2].width/2) - 3,
+				boxes[2].y + (boxes[2].height/2) + 6
 		);
 		
 		g2d.setColor(Resource.main_color[2]);

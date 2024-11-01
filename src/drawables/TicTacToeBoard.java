@@ -11,7 +11,7 @@ import interfaces.DrawableClip;
 import interfaces.Orientation;
 
 public abstract class TicTacToeBoard implements DrawableClip{
-	private int rows, cols, box_size, box_gap, next, marks;
+	private int rows, cols, box_size, box_gap, next, boxes_filled;
 	private TicTacToeBox box[][];
 	private ArrayList<Line> lines;
 	private boolean checking;
@@ -25,7 +25,7 @@ public abstract class TicTacToeBoard implements DrawableClip{
 		int r,c;
 		for(r=0; r<rows; r++) {
 			for(c=0; c<cols; c++) {
-				eachBox(r, c);
+				box[r][c] = new TicTacToeBox();
 			}
 		}
 		
@@ -89,26 +89,19 @@ public abstract class TicTacToeBoard implements DrawableClip{
 		return Symbol.values()[next];
 	}
 	public boolean isBoardCompleted() {
-		return marks == (rows * cols);
+		for(int r=0; r<rows; r++) {
+			for(int c=0; c<cols; c++) {
+				if(getBox(r, c).getSymbol() != null) {
+					boxes_filled++;
+				}
+			}
+		}
+		return boxes_filled == (rows*cols);
 	}
 	
 	public abstract void onNext(int next);
 	public abstract void onCheck();
 	
-	private void eachBox(int r, int c) {
-		box[r][c] = new TicTacToeBox() {
-			private static final long serialVersionUID = 6594134281295106864L;
-			@Override
-			public void onMarked(boolean isMarked) {
-				if(isMarked) {
-					marks++;
-				}
-				else {
-					marks--;
-				}
-			}
-		};
-	}
 	private void check_grid(Symbol symbol) {
 		checking = true;
 		
