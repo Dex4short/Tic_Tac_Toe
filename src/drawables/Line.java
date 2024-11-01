@@ -43,7 +43,7 @@ public class Line implements Drawable{
 		g2d.drawLine(
 				boxes[0].x + (boxes[0].width/2) - 4,
 				boxes[0].y + (boxes[0].height/2) + 4,
-				boxes[2].x + (boxes[2].width/2) - 4, 
+				boxes[2].x + (boxes[2].width/2) - 4,
 				boxes[2].y + (boxes[2].height/2) + 4
 		);
 		
@@ -54,6 +54,24 @@ public class Line implements Drawable{
 				boxes[2].x + (boxes[2].width/2),
 				boxes[2].y + (boxes[2].height/2)
 		);
+	}
+	public TicTacToeBox[] getBoxes() {
+		return boxes;
+	}
+	public boolean compare(Line line) {
+		TicTacToeBox boxes[] = line.getBoxes();
+		int check=0;
+		
+		for(int i=0; i<this.boxes.length; i++) {
+			for(int j=0; j<boxes.length; j++) {
+				if(this.boxes[i] == boxes[j]) {
+					check++;
+					break;
+				}
+			}
+		}
+		
+		return check==3;
 	}
 
 }

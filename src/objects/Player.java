@@ -5,20 +5,23 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
+import drawables.Score;
 import drawables.TicTacToeBoard;
 import interfaces.DrawableClip;
 import res.Resource;
 
 public abstract class Player implements DrawableClip{
+	private Score score;
 	private Color color;
 	private BasicStroke stroke;
-	private int arc, y_translate, y_deg, y_iterate;
 	private String name;
+	private int arc, y_translate, y_deg, y_iterate;
 	private boolean myTurn;
 
 	public Player(String name) {
 		setName(name);
 		
+		score = new Score();
 		stroke = new BasicStroke(10);
 		arc = 20;
 	}
@@ -99,6 +102,9 @@ public abstract class Player implements DrawableClip{
 		else {
 			hide();
 		}
+	}
+	public Score getScore() {
+		return score;
 	}
 	
 	public abstract TicTacToeBoard getTacToeBoard();

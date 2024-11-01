@@ -4,17 +4,14 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import default_package.Game;
 import enums.GridType;
 import enums.Symbol;
-import extras.Timing;
 import interfaces.Direction;
 import interfaces.DrawableClip;
 import interfaces.Orientation;
 
 public abstract class TicTacToeBoard implements DrawableClip{
-	private final Symbol symbols[] = {Symbol.X, Symbol.O};
-	private int rows, cols, box_size, box_gap, next;
+	private int rows, cols, box_size, box_gap, next, marks;
 	private TicTacToeBox box[][];
 	private ArrayList<Line> lines;
 	private boolean checking;
@@ -24,27 +21,19 @@ public abstract class TicTacToeBoard implements DrawableClip{
 		cols = grid_type.col;
 		
 		box = new TicTacToeBox[rows][cols];
+		
+		int r,c;
 		for(r=0; r<rows; r++) {
 			for(c=0; c<cols; c++) {
-				box[r][c] = new TicTacToeBox();
+				eachBox(r, c);
 			}
 		}
 		
-		new Thread() {
-			public void run() {
-				
-				while(!Game.loading_screen.isCurtainsOpen()){ //waiting for the loading screen
-					new Timing().sleep(1000);
-				}
-				
-				for(int r=0; r<rows; r++) {
-					for(int c=0; c<cols; c++) {
-						box[r][c].setVisible(true);
-					}
-				}
-				
-			};
-		}.start();
+		for(r=0; r<rows; r++) {
+			for(c=0; c<cols; c++) {
+				box[r][c].setVisible(true);
+			}
+		}
 		
 		lines = new ArrayList<Line>();
 	}
@@ -56,13 +45,7 @@ public abstract class TicTacToeBoard implements DrawableClip{
 		
 		for(r=0; r<rows; r++) {
 			for(c=0; c<cols; c++) {
-				box[r][c].drawClip(
-						g2d,
-						x + (r * box_size),
-						y + (c * box_size),
-						box_size - box_gap,
-						box_size - box_gap
-				);
+				box[r][c].drawClip(g2d, x + (r * box_size), y + (c * box_size), box_size - box_gap, box_size - box_gap);
 			}
 		}
 		
@@ -103,33 +86,63 @@ public abstract class TicTacToeBoard implements DrawableClip{
 		onNext(next);
 	}
 	public Symbol getNextSymbol() {
-		return symbols[next];
+		return Symbol.values()[next];
+	}
+	public boolean isBoardCompleted() {
+		return marks == (rows * cols);
 	}
 	
 	public abstract void onNext(int next);
+	public abstract void onCheck();
 	
+	private void eachBox(int r, int c) {
+		box[r][c] = new TicTacToeBox() {
+			private static final long serialVersionUID = 6594134281295106864L;
+			@Override
+			public void onMarked(boolean isMarked) {
+				if(isMarked) {
+					marks++;
+				}
+				else {
+					marks--;
+				}
+			}
+		};
+	}
 	private void check_grid(Symbol symbol) {
 		checking = true;
 		
 		for(int r=0; r<rows; r++) {
-			for(int c=0; c<cols; c++) {
-				if(getBox(r, c).isMarked()) continue;
-				
-				for(Direction direction: Direction.values()) {
-					if(check_line(0, r, c, symbol, direction)) {
-						lines.add(new Line(this , r, c, direction));
-					}
-				}
-				
-				for(Orientation orientation: Orientation.values()) {
-					if(check_line(0, r, c, symbol, orientation)) {
-						lines.add(new Line(this , r, c, orientation));
-					}
-				}
+			for(int c=0; c<cols; c++) {				
+				forEachDirectionOf(r, c, symbol);
+				forEachOrientationOf(r, c, symbol);
 			}
 		}
 
 		checking = false;
+	}
+	private void forEachDirectionOf(int r, int c, Symbol symbol) {
+		for(Direction direction: Direction.values()) {
+			if(check_line(0, r, c, symbol, direction)) {
+				addLine(new Line(this , r, c, direction));
+			}
+		}
+	}
+	private void forEachOrientationOf(int r, int c, Symbol symbol) {
+		for(Orientation orientation: Orientation.values()) {
+			if(check_line(0, r, c, symbol, orientation)) {
+				addLine(new Line(this , r, c, orientation));
+			}
+		}
+	}
+	private void addLine(Line line) {
+		for(Line l: lines) {
+			if(l.compare(line)) {
+				return;
+			}
+		}
+		lines.add(line);
+		onCheck();
 	}
 	private boolean check_line(int n, int r, int c, Symbol symbol, Direction direction) {
 		if(n == 3) return true;

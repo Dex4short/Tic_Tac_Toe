@@ -12,51 +12,12 @@ public class LoadingScreen implements DrawableClip{
 	private Curtain curtains[];
 	private int c;
 	private boolean curtains_open, curtains_moving, isLoading;
+	private Runnable when_fully_closed, when_fully_opened;
 	
 	public LoadingScreen(String text) {
 		this.text = text;
 		
-		curtains = new Curtain[8];
-		for(c=0; c<curtains.length; c++) {
-			
-			curtains[c] = new Curtain() {
-				final int C = c;
-				
-				@Override
-				public Curtain left() {
-					if((C-1) < 0) {
-						return null;
-					}
-					else {
-						return curtains[C-1];
-					}
-				}
-				@Override
-				public Curtain right() {
-					if((C+1) == curtains.length) {
-						return null;
-					}
-					else {
-						return curtains[C+1];
-					}
-				}
-				@Override
-				public void opened() {
-					if(C == curtains.length-1) {
-						curtains_open = true;
-						curtains_moving = false;
-						isLoading = false;
-					}
-				}
-				@Override
-				public void closed() {
-					if(C == 0) {
-						curtains_open = false;
-						curtains_moving = false;
-					}
-				}
-			};
-		}
+		initializeCurtains();
 		
 		curtains_open = false;
 		curtains_moving = false;
@@ -99,14 +60,24 @@ public class LoadingScreen implements DrawableClip{
 		 new Thread() {
 			@Override
 			public void run() {
-				while(curtains_moving && curtains_open) new Timing().sleep(1000);	//waiting for the animation
+				while(curtains_moving && curtains_open) {
+					new Timing().sleep(1000);//waiting for the curtains to fully close
+				}
 				
-				if(runnable != null) runnable.run();
+				if(runnable != null) {
+					runnable.run();//run instructions
+				}
 
-				new Timing().sleep(1000); //waiting for the animation
+				new Timing().sleep(1000); //standby
 				open();
 			}
 		}.start();
+	}
+	public void whenFullyClosed(Runnable runnable) {
+		when_fully_closed = runnable;
+	}
+	public void whenFullyOpened(Runnable runnable) {
+		when_fully_opened = runnable;
 	}
 	public void setText(String text) {
 		this.text = text;
@@ -118,6 +89,56 @@ public class LoadingScreen implements DrawableClip{
 		return isLoading;
 	}
 
+	private void initializeCurtains() {
+		curtains = new Curtain[8];
+		for(c=0; c<curtains.length; c++) {
+			curtains[c] = new Curtain() {
+				final int C = c;
+				@Override
+				public Curtain left() {
+					if((C-1) < 0) {
+						return null;
+					}
+					else {
+						return curtains[C-1];
+					}
+				}
+				@Override
+				public Curtain right() {
+					if((C+1) == curtains.length) {
+						return null;
+					}
+					else {
+						return curtains[C+1];
+					}
+				}
+				@Override
+				public void opened() {
+					if(C == curtains.length-1) {
+						curtains_open = true;
+						curtains_moving = false;
+						isLoading = false;
+						if(when_fully_opened != null) {
+							when_fully_opened.run();
+							when_fully_opened = null;
+						}
+					}
+				}
+				@Override
+				public void closed() {
+					if(C == 0) {
+						curtains_open = false;
+						curtains_moving = false;
+						if(when_fully_closed != null) {
+							when_fully_closed.run();
+							when_fully_closed = null;
+							
+						}
+					}
+				}
+			};
+		}
+	}
 	private abstract class Curtain implements DrawableClip{
 		private int r, g, b, a, tick;
 		private boolean open, move;

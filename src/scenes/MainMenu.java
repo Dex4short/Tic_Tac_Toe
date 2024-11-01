@@ -31,7 +31,7 @@ public class MainMenu implements Scene{
 			}
 			@Override
 			public void onAbout() {
-				
+				//TODO
 			}
 		};
 	}

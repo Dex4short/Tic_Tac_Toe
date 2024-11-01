@@ -40,7 +40,6 @@ public abstract class Dialog implements DrawableClip, AWTEventListener{
 	}
 	@Override
 	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
-		
 		g2d.setColor(Resource.main_color[2]);
 		g2d.fillRoundRect(x, y, w, h, arc, arc);
 		
@@ -49,13 +48,13 @@ public abstract class Dialog implements DrawableClip, AWTEventListener{
 		g2d.drawString(
 				title,
 				x + (w/2) - (g2d.getFontMetrics().stringWidth(title)/2), 
-				y + (h/3) + (g2d.getFontMetrics().getAscent()/2)
+				y + (h/3)
 		);
 		
 		btn_left.drawClip(
 				g2d, 						//Graphics2D
 				x + (w/4) - (w/6),			//x
-				y + ((h/3) * 2) - (h/16), 	//y
+				y + ((h/4) * 3) - (h/16), 	//y
 				(w/3), 						//width
 				h/8							//height
 		);

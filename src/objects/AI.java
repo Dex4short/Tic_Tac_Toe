@@ -45,17 +45,11 @@ public abstract class AI extends Player implements Action{
 		new Thread() {
 			public void run() {
 				new Timing().sleep(1000);//wait for the Ai to make a move
-				
 				while(PlayScene.paused) {//the Ai will wait for the game to resume
 					new Timing().sleep(1000);
-					
-					if(PlayScene.game_over) {//if the player returns to main menu
-						return;
-					}
+					if(PlayScene.suspended) return;//if the player returns to main menu
 				}
 				makeMove();
-				
-				board.next();//an obligation of Ai to declare next() to switch turns.
 			}
 		}.start();
 	}
@@ -84,9 +78,7 @@ public abstract class AI extends Player implements Action{
 
 				last_box = next_box;
 			}
-			else if(PlayScene.game_over) {
-				return;
-			}
+			else if(PlayScene.suspended) return;
 			new Timing().sleep(1000);
 		}
 		
@@ -98,5 +90,6 @@ public abstract class AI extends Player implements Action{
 		if(last_box != null) last_box.setHighlighted(false);
 		
 		System.out.println("Ai marked " + symbol.toString() + " at row: " + row + ", col: " + col + ".");
+		board.next();//an obligation of Ai to declare next() to switch turns.
 	}
 }

@@ -15,6 +15,7 @@ public abstract class Roullet implements DrawableClip{
 	private String p_name[];
 	private Pie pie[], selected_pie;
 	private Arrow arrow;
+	private boolean roullet_stopped=false, show_roulet=false;
 
 	public Roullet(GameMode game_mode) {
 		p_name = new String[] {game_mode.player1, game_mode.player2};
@@ -52,13 +53,15 @@ public abstract class Roullet implements DrawableClip{
 			@Override
 			public void onPoint(Pie pie) {
 				selected_pie = pie;
-				stop();
+				stop_roullet();
 			}
 		};
 		
 	}
 	@Override
 	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
+		if(!show_roulet) return; 
+		
 		g2d.translate(x, y);
 		
 		g2d.rotate(Math.toRadians(deg));
@@ -77,7 +80,7 @@ public abstract class Roullet implements DrawableClip{
 			}
 			
 			deg_iterate += deg_increment;
-			if(deg_iterate>6) {
+			if(deg_iterate>9) {
 				deg_increment = -0.05f;
 			}
 			else if(deg_iterate<0) {
@@ -95,7 +98,7 @@ public abstract class Roullet implements DrawableClip{
 		deg_increment = 0.05f;
 	}
 	public boolean isStoped() {
-		return deg_increment == 0;
+		return roullet_stopped;
 	}
 	public String getSelectedName() {
 		return selected_pie.name;
@@ -109,6 +112,9 @@ public abstract class Roullet implements DrawableClip{
 			color2 = color[new Random().nextInt(color.length)];
 		}
 		return color2;
+	}
+	public void show(boolean show) {
+		show_roulet = show;
 	}
 	
 	public abstract void onRoulletStopped();
@@ -146,8 +152,9 @@ public abstract class Roullet implements DrawableClip{
 		}
 	}
 
-	private void stop() {
+	private void stop_roullet() {
 		onRoulletStopped();
+		roullet_stopped = true;
 	}
 	private abstract class Arrow implements DrawableClip{
 		private float arrow_angle;

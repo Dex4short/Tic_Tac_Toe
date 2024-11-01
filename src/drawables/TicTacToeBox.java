@@ -13,7 +13,7 @@ import extras.RGBA;
 import interfaces.DrawableClip;
 import res.Resource;
 
-public class TicTacToeBox  extends Rectangle implements DrawableClip{
+public abstract class TicTacToeBox  extends Rectangle implements DrawableClip{
 	private static final long serialVersionUID = 5682340612501179503L;
 	private Symbol symbol;
 	private Color color, highlight;
@@ -52,7 +52,6 @@ public class TicTacToeBox  extends Rectangle implements DrawableClip{
 			new Timer().scheduleAtFixedRate(new TimerTask() {
 				@Override
 				public void run() {
-					
 					if(toVisible) {
 						alpha += alpha_iterator;
 						
@@ -71,7 +70,6 @@ public class TicTacToeBox  extends Rectangle implements DrawableClip{
 							cancel();
 						}
 					}
-
 					color = RGBA.setAlpha(Resource.main_color[0], alpha);
 				}
 			}, 0, 15);
@@ -97,5 +95,8 @@ public class TicTacToeBox  extends Rectangle implements DrawableClip{
 	}
 	public void setMark(boolean mark) {
 		this.mark = mark;
+		onMarked(isMarked());
 	}
+	
+	public abstract void onMarked(boolean isMarked);
 }
