@@ -81,6 +81,12 @@ public abstract class Dialog implements DrawableClip, AWTEventListener{
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	public Button getButtonLeft() {
+		return btn_left;
+	}
+	public Button getButtonRight() {
+		return btn_right;
+	}
 
 	public abstract void onLeftButtonClicked();
 	public abstract void onRigghtButtonClicked();

@@ -9,6 +9,7 @@ import drawables.LoadingScreen;
 import extras.Settings;
 import interfaces.Scene;
 import scenes.Intro;
+import scenes.PlayScene;
 
 public class Game extends JPanel implements Runnable{
 	private static final long serialVersionUID = -1530919121054777204L;
@@ -74,6 +75,7 @@ public class Game extends JPanel implements Runnable{
 		gameThread.start();
 	}
 	public void stop() {
+		PlayScene.suspended = true;
 		running = false;
 		try {
 			gameThread.join();

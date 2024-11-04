@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 import default_package.Game;
 import drawables.Dialog;
+import drawables.DialogGameOver;
 import drawables.DialogPause;
 import drawables.ButtonPause;
 import drawables.Roullet;
@@ -25,7 +26,7 @@ public class PlayScene implements Scene{
 	private TicTacToeBoard ticTacToe_board;
 	private ButtonPause pause_btn;
 	private Player player[];
-	private Dialog pause_dialog;
+	private Dialog pause_dialog, gameOver_dialog;
 	private Roullet roullet;
 	private Scene next_scene;
 	private int next_turn;
@@ -43,17 +44,6 @@ public class PlayScene implements Scene{
 				pauseGame();
 			}
 		};
-		
-		pause_dialog = new DialogPause() {
-			@Override
-			public void onRigghtButtonClicked() {
-				resumeGame();
-			}
-			@Override
-			public void onLeftButtonClicked() {
-				toMainMenu();
-			}
-		};
 
 		roullet = new Roullet(game_play.getGame_mode()) {
 			@Override
@@ -69,6 +59,9 @@ public class PlayScene implements Scene{
 			roullet.roll();
 		});
 		
+		paused=false;
+		suspended=false;
+		game_over=false;
 	}
 	private int board_x, board_y, board_size,roullet_size;
 	@Override
@@ -99,12 +92,18 @@ public class PlayScene implements Scene{
 		if(paused) {
 			pause_dialog.drawClip(g2d, (rect.width/2) - 300, (rect.height/2) - 150, 600, 300);
 		}
+		if(game_over) {
+			gameOver_dialog.drawClip(g2d, (rect.width/2) - 300, (rect.height/2) - 150, 600, 300);
+		}
 	}
 	@Override
 	public void eventDispatched(AWTEvent event) {
 		if(ticTacToe_board != null) {
 			if(paused) {
 				pause_dialog.eventDispatched(event);
+			}
+			else if(game_over) {
+				gameOver_dialog.eventDispatched(event);
 			}
 			else{
 				if(player[next_turn] instanceof Human) {
@@ -208,8 +207,22 @@ public class PlayScene implements Scene{
 		}
 	}
 	private void pauseGame() {
-		((DialogPause)pause_dialog).show(true);
 		paused = true;
+		pause_dialog = new DialogPause() {
+			@Override
+			public void onRigghtButtonClicked() {
+				resumeGame();
+			}
+			@Override
+			public void onLeftButtonClicked() {
+				toMainMenu();
+			}
+			@Override
+			public void onShown(boolean show) {
+				paused = show;
+			}
+		};
+		((DialogPause)pause_dialog).show(true);
 	}
 	private void toMainMenu() {
 		Game.loading_screen.load(() -> {
@@ -222,5 +235,41 @@ public class PlayScene implements Scene{
 	}
 	private void gameOver() {
 		game_over = true;
+		gameOver_dialog = new DialogGameOver() {
+			@Override
+			public void onRigghtButtonClicked() {
+				newGame();
+			}
+			@Override
+			public void onLeftButtonClicked() {
+				toMainMenu();
+			}
+			@Override
+			public Player getWinner() {
+				return winning_player();
+			}
+		};
+		((DialogGameOver)gameOver_dialog).show(true);
+	}
+	private Player winning_player() {
+		int
+		p1_score = player[0].getScore().getAmount(),
+		p2_score = player[1].getScore().getAmount();
+		
+		if(p1_score > p2_score) {
+			return player[0];
+		}
+		else if(p1_score < p2_score) {
+			return player[1];
+		}
+		else {
+			return null;
+		}
+	}
+	private void newGame() {
+		Game.loading_screen.load(() -> {
+			next_scene = new PlayScene(game_play);
+		});
+		game_over = false;
 	}
 }

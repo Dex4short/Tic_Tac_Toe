@@ -11,7 +11,7 @@ import interfaces.DrawableClip;
 import interfaces.Orientation;
 
 public abstract class TicTacToeBoard implements DrawableClip{
-	private int rows, cols, box_size, box_gap, next, boxes_filled;
+	private int rows, cols, box_size, box_gap, next;
 	private TicTacToeBox box[][];
 	private ArrayList<Line> lines;
 	private boolean checking;
@@ -89,6 +89,7 @@ public abstract class TicTacToeBoard implements DrawableClip{
 		return Symbol.values()[next];
 	}
 	public boolean isBoardCompleted() {
+		int boxes_filled=0;
 		for(int r=0; r<rows; r++) {
 			for(int c=0; c<cols; c++) {
 				if(getBox(r, c).getSymbol() != null) {
@@ -96,6 +97,7 @@ public abstract class TicTacToeBoard implements DrawableClip{
 				}
 			}
 		}
+		System.out.println(boxes_filled + "==" + (rows*cols));
 		return boxes_filled == (rows*cols);
 	}
 	
@@ -108,7 +110,6 @@ public abstract class TicTacToeBoard implements DrawableClip{
 		for(int r=0; r<rows; r++) {
 			for(int c=0; c<cols; c++) {				
 				forEachDirectionOf(r, c, symbol);
-				forEachOrientationOf(r, c, symbol);
 			}
 		}
 

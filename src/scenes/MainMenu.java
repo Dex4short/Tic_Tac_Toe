@@ -34,6 +34,7 @@ public class MainMenu implements Scene{
 				//TODO
 			}
 		};
+		
 	}
 	@Override
 	public void paint(Graphics2D g2d) {

@@ -132,7 +132,6 @@ public class LoadingScreen implements DrawableClip{
 						if(when_fully_closed != null) {
 							when_fully_closed.run();
 							when_fully_closed = null;
-							
 						}
 					}
 				}
