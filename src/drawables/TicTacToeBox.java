@@ -95,6 +95,7 @@ public class TicTacToeBox  extends Rectangle implements DrawableClip{
 		}
 	}
 	public void setSymbol(Symbol symbol) {
+		Sound.playOnSymbolPlaced();
 		this.symbol = symbol;
 	}
 	public Symbol getSymbol() {

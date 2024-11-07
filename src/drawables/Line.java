@@ -4,7 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import interfaces.Direction;
+import enums.Direction;
 import interfaces.Drawable;
 import interfaces.Orientation;
 import res.Resource;

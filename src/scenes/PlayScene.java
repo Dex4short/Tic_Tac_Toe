@@ -42,6 +42,7 @@ public class PlayScene implements Scene{
 			private static final long serialVersionUID = -8785478662783287079L;
 			@Override
 			public void onPause() {
+				Sound.playOnPause();
 				pauseGame();
 			}
 		};
@@ -137,6 +138,7 @@ public class PlayScene implements Scene{
 			@Override
 			public void onCheck() {
 				player[next_turn].getScore().addAmount(1);
+				Sound.playOnGainPoints();
 			}
 		};
 	}
@@ -153,7 +155,7 @@ public class PlayScene implements Scene{
 		
 		player[p1] = new Human("Player 1") {
 			@Override
-			public TicTacToeBoard getTacToeBoard() {
+			public TicTacToeBoard getTicTacToeBoard() {
 				return ticTacToe_board;
 			}
 			@Override
@@ -166,19 +168,18 @@ public class PlayScene implements Scene{
 		switch (game_play.getGame_mode()) {
 		case PvP: 	player[p2] = new Human("Player 2") {
 						@Override
-						public TicTacToeBoard getTacToeBoard() {
+						public TicTacToeBoard getTicTacToeBoard() {
 							return ticTacToe_board;
 						}
 						@Override
 						public void onMyTurn() {
 							player[p1].myTurn(false);
-							
 						}
 					};
 			break;
-		case PvCom: player[p2] = new AI() {
+		case PvCom: player[p2] = new AI(game_play.getDifficulty()) {
 					@Override
-					public TicTacToeBoard getTacToeBoard() {
+					public TicTacToeBoard getTicTacToeBoard() {
 						return ticTacToe_board;
 					}
 					@Override
@@ -248,7 +249,7 @@ public class PlayScene implements Scene{
 				toMainMenu();
 			}
 			@Override
-			public Player getWinner() {
+			public Player getWinner() {				
 				return winning_player();
 			}
 		};

@@ -28,7 +28,7 @@ public abstract class Human extends Player implements AWTEventListener{
 	}
 	private TicTacToeBox last_box;
 	private void onMouseMoved(MouseEvent e) {
-		TicTacToeBox box = getTacToeBoard().getBox(e.getPoint());
+		TicTacToeBox box = getTicTacToeBoard().getBox(e.getPoint());
 		if(last_box!=box && last_box!=null) {
 			last_box.setHighlighted(false);
 			last_box = null;
@@ -39,11 +39,11 @@ public abstract class Human extends Player implements AWTEventListener{
 		}
 	}
 	private void onMouseClicked(MouseEvent e) {
-		TicTacToeBox box = getTacToeBoard().getBox(e.getPoint());
+		TicTacToeBox box = getTicTacToeBoard().getBox(e.getPoint());
 		if(box != null && box.getSymbol()==null) {
-			box.setSymbol(getTacToeBoard().getNextSymbol());
+			box.setSymbol(getTicTacToeBoard().getNextSymbol());
 			box.setHighlighted(false);
-			getTacToeBoard().next();
+			getTicTacToeBoard().next();
 		}
 	}
 }

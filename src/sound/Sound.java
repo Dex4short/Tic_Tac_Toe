@@ -48,26 +48,26 @@ public class Sound {
 	public static void playOnPlayerCardRased() {//1sec
 		System.out.println("Card Raised.mp3");
 	}
-	public static void playOnSymbolPlaced() {
-		
+	public static void playOnSymbolPlaced() {//1sec
+		System.out.println("Symbol Placed.mp3");
 	}
-	public static void playOnLineDashed() {
-		
+	public static void playOnLineDashed() {//1sec
+		System.out.println("Line Dashed.mp3");
 	}
-	public static void playOnGainPoints() {
-		
+	public static void playOnGainPoints() {//1sec
+		System.out.println("Gain Points.mp3");
 	}
-	public static void playOnPause() {
-		
+	public static void playOnPause() {//1sec
+		System.out.println("Pause.mp3");
 	}
-	public static void playOnPlayerWins() {
-		
+	public static void playOnPlayerWins() {//3sec
+		System.out.println("Player Wins.mp3");
 	}
-	public static void playeOnPlayerLoses() {
-		
+	public static void playeOnPlayerLoses() {//3sec
+		System.out.println("Player Lose.mp3");
 	}
-	public static void playOnDraw() {
-		
+	public static void playOnDraw() {//3sec
+		System.out.println("Draw.mp3");
 	}
 
 }

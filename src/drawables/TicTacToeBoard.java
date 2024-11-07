@@ -4,11 +4,12 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import enums.Direction;
 import enums.GridType;
 import enums.Symbol;
-import interfaces.Direction;
 import interfaces.DrawableClip;
 import interfaces.Orientation;
+import sound.Sound;
 
 public abstract class TicTacToeBoard implements DrawableClip{
 	private int rows, cols, box_size, box_gap, next;
@@ -132,6 +133,7 @@ public abstract class TicTacToeBoard implements DrawableClip{
 			}
 		}
 	}
+	@Deprecated
 	private void forEachOrientationOf(int r, int c, Symbol symbol) {
 		for(Orientation orientation: Orientation.values()) {
 			if(check_line(0, r, c, symbol, orientation)) {
@@ -146,6 +148,7 @@ public abstract class TicTacToeBoard implements DrawableClip{
 			}
 		}
 		lines.add(line);
+		Sound.playOnLineDashed();
 		onCheck();
 	}
 	private boolean check_line(int n, int r, int c, Symbol symbol, Direction direction) {

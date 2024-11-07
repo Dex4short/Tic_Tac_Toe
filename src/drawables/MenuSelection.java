@@ -1,6 +1,7 @@
 package drawables;
 
 import java.awt.AWTEvent;
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -9,6 +10,7 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 
 import enums.Challenge;
+import enums.Difficulty;
 import enums.GameMode;
 import enums.GridType;
 import interfaces.Action;
@@ -27,13 +29,17 @@ public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 	
 	public MenuSelection() {
 		stroke = new BasicStroke(5);
+		
 		selections = new Selection[]{
 			new ButtonPlay(),
+			new ButtonDifficulty(),
 			new ButtonGrid(),
 			new ButtonMode(),
 			new ButtonChallenge(),
 			new ButtonAbout()
 		};
+		selections[1].disable(true);
+		
 		font = new Font("Calibri", Font.BOLD, 20);
 		game_play = new GamePlay();
 	}
@@ -77,15 +83,24 @@ public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 	public abstract class Selection extends Rectangle implements DrawableClip,AWTEventListener,ButtonModel,Action{
 		private static final long serialVersionUID = -7267045785208769956L;
 		private int arc=20;
+		private AlphaComposite alpha_composite, normal_composite;
 		private String text;
-		private boolean hover,pressed;
+		private boolean hover,pressed,disable;
 
 		public Selection(String text) {
 			this.text = text;
+			
+			disable = false;
+			alpha_composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+			normal_composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
 		}
 		@Override
 		public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
 			setBounds(x, y, w, h);
+			
+			if(isDisabled()) {
+				g2d.setComposite(alpha_composite);
+			}
 
 			if(pressed) {
 				g2d.setColor(Resource.main_color[0].darker());
@@ -105,9 +120,15 @@ public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 					x + (w/2) - (g2d.getFontMetrics().stringWidth(text)/2),
 					y + (h/2) + (g2d.getFontMetrics().getAscent()/2)
 			);
+			
+			if(isDisabled()) {
+				g2d.setComposite(normal_composite);
+			}
 		}
 		@Override
 		public void eventDispatched(AWTEvent event) {
+			if(isDisabled()) return;
+			
 			if(event instanceof MouseEvent) {
 				MouseEvent e = (MouseEvent)event;
 				
@@ -169,6 +190,12 @@ public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 		public void setText(String text) {
 			this.text = text;
 		}
+		public void disable(boolean disable) {
+			this.disable = disable;
+		}
+		public boolean isDisabled() {
+			return disable;
+		}
 	}
 	
 	private class ButtonPlay extends Selection{
@@ -217,12 +244,33 @@ public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 			super.onAction();
 			if(getSelected().equals("PvP")) {
 				game_play.setGame_mode(GameMode.PvP);
+				selections[1].disable(true);
 			}
 			else if(getSelected().equals("PvCom")) {
 				game_play.setGame_mode(GameMode.PvCom);
+				selections[1].disable(false);
 			}
 		}
-		
+	}
+	private class ButtonDifficulty extends SwappableButton{
+		private static final long serialVersionUID = 4249264716971655694L;
+
+		public ButtonDifficulty() {
+			super("Difficulty", new String[] {"Easy", "Normal", "Hard" });
+		}
+		@Override
+		public void onAction() {
+			super.onAction();
+			if(getSelected().equals("Easy")) {
+				game_play.setDifficulty(Difficulty.Easy);
+			}
+			else if(getSelected().equals("Normal")) {
+				game_play.setDifficulty(Difficulty.Normal);
+			}
+			else if(getSelected().equals("Hard")) {
+				game_play.setDifficulty(Difficulty.Hard);
+			}
+		}
 	}
 	private class ButtonGrid extends SwappableButton{
 		private static final long serialVersionUID = 4249264716971655694L;
@@ -243,7 +291,6 @@ public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 				game_play.setGrid_type(GridType.Grid_9x9);
 			}
 		}
-		
 	}
 	private class ButtonChallenge extends SwappableButton{
 		private static final long serialVersionUID = 1528737073575125893L;

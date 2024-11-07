@@ -2,7 +2,9 @@ package drawables;
 
 import java.awt.Graphics2D;
 
+import objects.Human;
 import objects.Player;
+import sound.Sound;
 
 public abstract class DialogGameOver extends DialogPause{
 
@@ -31,9 +33,16 @@ public abstract class DialogGameOver extends DialogPause{
 		if(show) {
 			if(winner == null) {
 				setTitle("Draw!");
+				Sound.playOnDraw();
 			}
 			else {
 				setTitle(winner.getName() + " Wins!");
+				if(winner instanceof Human) {
+					Sound.playOnPlayerWins();
+				}
+				else {
+					Sound.playeOnPlayerLoses();
+				}
 			}
 		}
 		else {

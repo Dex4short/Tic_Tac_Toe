@@ -107,7 +107,7 @@ public abstract class Player implements DrawableClip{
 		return score;
 	}
 	
-	public abstract TicTacToeBoard getTacToeBoard();
+	public abstract TicTacToeBoard getTicTacToeBoard();
 	public abstract void onMyTurn();
 	
 	public void show() {
