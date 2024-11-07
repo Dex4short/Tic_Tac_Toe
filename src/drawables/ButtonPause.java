@@ -12,6 +12,7 @@ import extras.Listeners;
 import interfaces.ButtonModel;
 import interfaces.DrawableClip;
 import res.Resource;
+import sound.Sound;
 
 public abstract class ButtonPause extends Rectangle implements DrawableClip, AWTEventListener, ButtonModel{
 	private static final long serialVersionUID = 2803333208958227507L;
@@ -47,9 +48,22 @@ public abstract class ButtonPause extends Rectangle implements DrawableClip, AWT
 	public void eventDispatched(AWTEvent event) {
 		Listeners.listen(event, this);
 	}
+	private int sound_flag=0;
 	@Override
-	public void onHighlight(MouseEvent e) {
-		highlight = (getBounds().contains(e.getPoint())) ? color.darker() : new Color(0,0,0,0);
+	public void onHover(MouseEvent e) {
+		if(getBounds().contains(e.getPoint())) {
+			if(sound_flag==1) {
+				Sound.playOnHoverButton();
+				sound_flag = 0;
+			}
+			highlight = color.darker();
+		}
+		else {
+			if(sound_flag==0) {
+				sound_flag = 1;
+			}
+			highlight = new Color(0,0,0,0);
+		}
 	}
 	@Override
 	public void onPress(MouseEvent e) {
@@ -66,6 +80,7 @@ public abstract class ButtonPause extends Rectangle implements DrawableClip, AWT
 	@Override
 	public void onClicked(MouseEvent e) {
 		if(getBounds().contains(e.getPoint())) {
+			Sound.playOnClickButton();
 			highlight = new Color(0,0,0,0);
 			onPause();
 		}

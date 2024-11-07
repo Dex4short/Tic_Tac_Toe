@@ -13,6 +13,7 @@ import interfaces.Action;
 import interfaces.ButtonModel;
 import interfaces.DrawableClip;
 import res.Resource;
+import sound.Sound;
 
 public abstract class Button extends Rectangle implements DrawableClip, AWTEventListener, ButtonModel, Action{
 	private static final long serialVersionUID = 2803333208958227507L;
@@ -54,9 +55,22 @@ public abstract class Button extends Rectangle implements DrawableClip, AWTEvent
 	public void eventDispatched(AWTEvent event) {
 		Listeners.listen(event, this);
 	}
+	private int sound_flag=0;
 	@Override
-	public void onHighlight(MouseEvent e) {
-		border_color = (getBounds().contains(e.getPoint())) ? highlight : new Color(0,0,0,0);
+	public void onHover(MouseEvent e) {
+		if(getBounds().contains(e.getPoint())) {
+			if(sound_flag==1) {
+				Sound.playOnHoverButton();
+				sound_flag = 0;
+			}
+			border_color = highlight;
+		}
+		else {
+			if(sound_flag==0) {
+				sound_flag = 1;
+			}
+			border_color =new Color(0,0,0,0);
+		}
 	}
 	@Override
 	public void onPress(MouseEvent e) {
@@ -71,6 +85,7 @@ public abstract class Button extends Rectangle implements DrawableClip, AWTEvent
 	@Override
 	public void onClicked(MouseEvent e) {
 		if(getBounds().contains(e.getPoint())) {
+			Sound.playOnClickButton();
 			border_color = new Color(0,0,0,0);
 			onAction();
 		}

@@ -12,9 +12,11 @@ import enums.Challenge;
 import enums.GameMode;
 import enums.GridType;
 import interfaces.Action;
+import interfaces.ButtonModel;
 import interfaces.DrawableClip;
 import objects.GamePlay;
 import res.Resource;
+import sound.Sound;
 
 public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 	private int selection_x, selection_y,selection_w, selection_h, selection_arc=20, s;
@@ -72,7 +74,7 @@ public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 		}
 	}
 	
-	public abstract class Selection extends Rectangle implements DrawableClip,AWTEventListener,Action{
+	public abstract class Selection extends Rectangle implements DrawableClip,AWTEventListener,ButtonModel,Action{
 		private static final long serialVersionUID = -7267045785208769956L;
 		private int arc=20;
 		private String text;
@@ -111,32 +113,54 @@ public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 				
 				switch(e.getID()) {
 				case MouseEvent.MOUSE_PRESSED:
-					if(getBounds().contains(e.getPoint())) {
-						pressed = true;
-					}
+					onPress(e);
 					break;
-					
 				case MouseEvent.MOUSE_RELEASED:
-					if(getBounds().contains(e.getPoint())) {
-						pressed = false;
-					}
+					onRelease(e);
 					break;
-					
 				case MouseEvent.MOUSE_CLICKED:
-					if(getBounds().contains(e.getPoint()))	{
-						onAction();
-					}
+					onClicked(e);
 					break;
-					
 				case MouseEvent.MOUSE_MOVED:
-					if(getBounds().contains(e.getPoint())) {
-						hover = true;
-					}
-					else {
-						hover = false;
-					}
+					onHover(e);
 					break;
 				}
+			}
+		}
+		private int sound_flag=0;
+		@Override
+		public void onHover(MouseEvent e) {
+			if(getBounds().contains(e.getPoint())) {
+				if(sound_flag==1) {
+					Sound.playOnHoverButton();
+					sound_flag = 0;
+				}
+				hover = true;
+			}
+			else {
+				if(sound_flag==0) {
+					sound_flag = 1;
+				}
+				hover = false;
+			}
+		}
+		@Override
+		public void onPress(MouseEvent e) {
+			if(getBounds().contains(e.getPoint())) {
+				pressed = true;
+			}
+		}
+		@Override
+		public void onRelease(MouseEvent e) {
+			if(getBounds().contains(e.getPoint())) {
+				pressed = false;
+			}
+		}
+		@Override
+		public void onClicked(MouseEvent e) {
+			if(getBounds().contains(e.getPoint()))	{
+				Sound.playOnClickButton();
+				onAction();
 			}
 		}
 		public String getText() {

@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import drawables.TicTacToeBox;
 
 public abstract class Human extends Player implements AWTEventListener{
-	private TicTacToeBox last_box;
 
 	public Human(String name) {
 		super(name);
@@ -25,14 +24,14 @@ public abstract class Human extends Player implements AWTEventListener{
 				onMouseClicked(e);
 				break;
 			}
-			
 		}
 	}
+	private TicTacToeBox last_box;
 	private void onMouseMoved(MouseEvent e) {
 		TicTacToeBox box = getTacToeBoard().getBox(e.getPoint());
-
-		if(last_box != null) {
+		if(last_box!=box && last_box!=null) {
 			last_box.setHighlighted(false);
+			last_box = null;
 		}
 		if(box != null) {
 			box.setHighlighted(true);
@@ -41,7 +40,6 @@ public abstract class Human extends Player implements AWTEventListener{
 	}
 	private void onMouseClicked(MouseEvent e) {
 		TicTacToeBox box = getTacToeBoard().getBox(e.getPoint());
-		
 		if(box != null && box.getSymbol()==null) {
 			box.setSymbol(getTacToeBoard().getNextSymbol());
 			box.setHighlighted(false);

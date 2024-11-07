@@ -12,6 +12,7 @@ import enums.Symbol;
 import extras.RGBA;
 import interfaces.DrawableClip;
 import res.Resource;
+import sound.Sound;
 
 public class TicTacToeBox  extends Rectangle implements DrawableClip{
 	private static final long serialVersionUID = 5682340612501179503L;
@@ -47,7 +48,7 @@ public class TicTacToeBox  extends Rectangle implements DrawableClip{
 	public void setVisible(boolean toVisible) {
 		if(!running) {
 			running = true;
-			alpha_iterator = 4 + new Random().nextInt(16);
+			alpha_iterator = 4 + new Random().nextInt(32);
 			
 			new Timer().scheduleAtFixedRate(new TimerTask() {
 				@Override
@@ -59,6 +60,7 @@ public class TicTacToeBox  extends Rectangle implements DrawableClip{
 							alpha = 255;
 							running = false;
 							cancel();
+							Sound.playOnTicTacToeBoxAppeared();
 						}
 					}
 					else {
@@ -76,12 +78,20 @@ public class TicTacToeBox  extends Rectangle implements DrawableClip{
 			
 		}
 	}
+	private int sound_flag=0;
 	public void setHighlighted(boolean highlighted) {
 		if(highlighted) {
+			if(sound_flag == 1) {
+				Sound.playOnTicTacToeBoxHovered();
+				sound_flag=0;
+			}
 			highlight = color.darker();
 		}
 		else {
-			highlight = color;
+			if(sound_flag == 0) {
+				sound_flag=1;
+			}
+			highlight = new Color(0,0,0,0);
 		}
 	}
 	public void setSymbol(Symbol symbol) {

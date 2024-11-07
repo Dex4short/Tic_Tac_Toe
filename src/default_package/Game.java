@@ -46,7 +46,9 @@ public class Game extends JPanel implements Runnable{
 				AWTEvent.MOUSE_EVENT_MASK |				//for mouse clicked, pressed, released, entered, exited
 				AWTEvent.MOUSE_MOTION_EVENT_MASK |		//for mouse dragged and moved
 				AWTEvent.COMPONENT_EVENT_MASK			//for resize event
-		);		
+		);
+		
+		
 	}
 	@Override
 	public void paintComponent(Graphics g) {

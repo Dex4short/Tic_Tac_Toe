@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import extras.Timing;
 import interfaces.DrawableClip;
 import res.Resource;
+import sound.Sound;
 
 public class LoadingScreen implements DrawableClip{
 	private String text;
@@ -39,11 +40,13 @@ public class LoadingScreen implements DrawableClip{
 		);
 		
 	}
-	public void open() {		
+	public void open() {
+		Sound.playOnLoadingCurtainsOpened();
 		curtains[0].open();
 		curtains_moving = true;
 	}
 	public void close() {
+		Sound.playOnLoadingCurtainsClosed();
 		curtains[curtains.length-1].close();
 		curtains_moving = true;
 	}
@@ -60,6 +63,8 @@ public class LoadingScreen implements DrawableClip{
 		 new Thread() {
 			@Override
 			public void run() {
+				Sound.playOnLoading();
+				
 				while(curtains_moving && curtains_open) {
 					new Timing().sleep(1000);//waiting for the curtains to fully close
 				}

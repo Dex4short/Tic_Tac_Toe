@@ -10,6 +10,7 @@ import drawables.Title;
 import interfaces.DrawableClip;
 import interfaces.Scene;
 import objects.GamePlay;
+import sound.Sound;
 
 public class MainMenu implements Scene{
 	private int w,h;
@@ -35,6 +36,7 @@ public class MainMenu implements Scene{
 			}
 		};
 		
+		Sound.playOnMainMenu();
 	}
 	@Override
 	public void paint(Graphics2D g2d) {

@@ -15,7 +15,7 @@ public class Listeners {
 			
 			switch (e.getID()) {
 			case MouseEvent.MOUSE_MOVED:
-				btn_model.onHighlight(e);
+				btn_model.onHover(e);
 				break;
 			case MouseEvent.MOUSE_PRESSED:
 				btn_model.onPress(e);

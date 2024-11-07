@@ -19,6 +19,7 @@ import objects.GamePlay;
 import objects.Human;
 import objects.Player;
 import res.Resource;
+import sound.Sound;
 
 public class PlayScene implements Scene{
 	private Rectangle rect;
@@ -62,6 +63,8 @@ public class PlayScene implements Scene{
 		paused=false;
 		suspended=false;
 		game_over=false;
+		
+		Sound.playOnPlayeScene();
 	}
 	private int board_x, board_y, board_size,roullet_size;
 	@Override

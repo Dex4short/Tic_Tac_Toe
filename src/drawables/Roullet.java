@@ -7,6 +7,7 @@ import java.util.Random;
 import enums.GameMode;
 import interfaces.DrawableClip;
 import res.Resource;
+import sound.Sound;
 
 public abstract class Roullet implements DrawableClip{
 	private Color color[];
@@ -96,6 +97,7 @@ public abstract class Roullet implements DrawableClip{
 		deg = new Random().nextInt(360);
 		deg_iterate = 0;
 		deg_increment = 0.05f;
+		Sound.playOnRollRoullet();
 	}
 	public boolean isStoped() {
 		return roullet_stopped;
@@ -155,6 +157,7 @@ public abstract class Roullet implements DrawableClip{
 	private void stop_roullet() {
 		onRoulletStopped();
 		roullet_stopped = true;
+		Sound.playOnStopRoullet();
 	}
 	private abstract class Arrow implements DrawableClip{
 		private float arrow_angle;

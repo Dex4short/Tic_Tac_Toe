@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import default_package.Game;
 import interfaces.Scene;
 import res.Resource;
+import sound.Sound;
 
 public class Intro implements Scene{
 	private final int img_w=200, img_h=200;
@@ -22,6 +23,7 @@ public class Intro implements Scene{
 
 	public Intro() {
 		logo = Toolkit.getDefaultToolkit().getImage(new Resource().get("DX games logo.png"));
+		Sound.playOnIntro();
 	}
 	@Override
 	public void paint(Graphics2D g2d) {

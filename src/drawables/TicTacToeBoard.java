@@ -97,8 +97,18 @@ public abstract class TicTacToeBoard implements DrawableClip{
 				}
 			}
 		}
-		System.out.println(boxes_filled + "==" + (rows*cols));
-		return boxes_filled == (rows*cols);
+		
+		boolean completed = (boxes_filled == (rows*cols));
+		
+		if(completed) {
+			for(r=0; r<rows; r++) {
+				for(c=0; c<cols; c++) {
+					box[r][c].setVisible(false);
+				}
+			}
+		}
+		
+		return completed;
 	}
 	
 	public abstract void onNext(int next);
