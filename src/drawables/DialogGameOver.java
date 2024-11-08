@@ -7,15 +7,16 @@ import objects.Player;
 import sound.Sound;
 
 public abstract class DialogGameOver extends DialogPause{
-
+	private static final long serialVersionUID = 7227538691631842214L;
+	
 	public DialogGameOver() {
 		setTitle("");
 		getButtonLeft().setButtonName("Main Menu");
 		getButtonRight().setButtonName("New Game");
 	}
 	@Override
-	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
-		super.drawClip(g2d, x, y, w, h);
+	public void draw(Graphics2D g2d) {
+		super.draw(g2d);
 	}
 	@Override
 	public void show(boolean show) {

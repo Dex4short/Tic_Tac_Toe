@@ -7,10 +7,11 @@ import java.awt.Rectangle;
 
 import drawables.Score;
 import drawables.TicTacToeBoard;
-import interfaces.DrawableClip;
+import interfaces.Drawable;
 import res.Resource;
 
-public abstract class Player implements DrawableClip{
+public abstract class Player extends Rectangle implements Drawable{
+	private static final long serialVersionUID = -8526841904725307929L;
 	private Score score;
 	private Color color;
 	private BasicStroke stroke;
@@ -27,18 +28,18 @@ public abstract class Player implements DrawableClip{
 	}
 	private Rectangle original_clip;
 	@Override
-	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
+	public void draw(Graphics2D g2d) {
 		original_clip = g2d.getClipBounds();
 		
-		g2d.setClip(x, y, w, h);
+		g2d.setClip(x, y, width, height);
 		g2d.translate(0, y_translate);
 		
 		g2d.setColor(color);
 		g2d.fillRoundRect(
 				x,
 				y,
-				w,
-				h+arc,
+				width,
+				height+arc,
 				arc,
 				arc
 		);
@@ -48,8 +49,8 @@ public abstract class Player implements DrawableClip{
 		g2d.drawRoundRect(
 				x+(arc/2),
 				y+(arc/2),
-				w-arc,
-				h,
+				width-arc,
+				height,
 				arc/2,
 				arc/2
 		);
@@ -58,8 +59,8 @@ public abstract class Player implements DrawableClip{
 		g2d.setFont(Resource.font[1]);
 		g2d.drawString(
 				name,
-				x + (w/2) - (g2d.getFontMetrics().stringWidth(name)/2),
-				y + (h/2) + (g2d.getFontMetrics().getAscent()/2)
+				x + (width/2) - (g2d.getFontMetrics().stringWidth(name)/2),
+				y + (height/2) + (g2d.getFontMetrics().getAscent()/2)
 		);
 		
 		g2d.translate(0, -y_translate);
@@ -69,7 +70,7 @@ public abstract class Player implements DrawableClip{
 			y_deg += y_iterate;
 			
 			if(y_deg>=0 && y_deg<90) {
-				y_translate = (int)(Math.sin(Math.toRadians(y_deg)) * h);
+				y_translate = (int)(Math.sin(Math.toRadians(y_deg)) * height);
 			}
 			else {
 				y_iterate = 0;

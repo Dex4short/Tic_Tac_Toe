@@ -21,7 +21,8 @@ import objects.Player;
 import res.Resource;
 import sound.Sound;
 
-public class PlayScene implements Scene{
+public class PlayScene extends Rectangle implements Scene{
+	private static final long serialVersionUID = 7565085178773988848L;
 	private Rectangle rect;
 	private GamePlay game_play;
 	private TicTacToeBoard ticTacToe_board;
@@ -48,6 +49,7 @@ public class PlayScene implements Scene{
 		};
 
 		roullet = new Roullet(game_play.getGame_mode()) {
+			private static final long serialVersionUID = -6257683198736734735L;
 			@Override
 			public void onRoulletStopped() {
 				new Timing().sleep(1000);
@@ -69,7 +71,7 @@ public class PlayScene implements Scene{
 	}
 	private int board_x, board_y, board_size,roullet_size;
 	@Override
-	public void paint(Graphics2D g2d) {
+	public void draw(Graphics2D g2d) {
 		rect = g2d.getClipBounds();
 		board_x = (rect.width/2) - (board_size/2);
 		board_y = (rect.height/2) - (board_size/2);
@@ -79,25 +81,37 @@ public class PlayScene implements Scene{
 		g2d.fill(rect);
 		
 		if(roullet.isStoped()) {
-			ticTacToe_board.drawClip(g2d, board_x, board_y, board_size, board_size);
-			pause_btn.drawClip(g2d, (rect.width/2) - 25, 10, 50, 50);
-
-			player[0].getScore().drawClip(g2d, board_x, 10, (board_size/2) - 25, 50);
-			player[1].getScore().drawClip(g2d, pause_btn.x + pause_btn.width, 10, (board_size/2) - 25, 50);
+			ticTacToe_board.setBounds(board_x, board_y, board_size, board_size);
+			ticTacToe_board.draw(g2d);
 			
-			player[0].drawClip(g2d, board_x / 8, board_y + board_size, (board_x / 8) * 6, board_y);
-			player[1].drawClip(g2d, board_x + board_size + (board_x / 8), board_y + board_size, (board_x / 8) * 6, board_y);
+			pause_btn.setBounds((rect.width/2) - 25, 10, 50, 50);
+			pause_btn.draw(g2d);
+
+			player[0].getScore().setBounds(board_x, 10, (board_size/2) - 25, 50);
+			player[0].getScore().draw(g2d);
+
+			player[1].getScore().setBounds(pause_btn.x + pause_btn.width, 10, (board_size/2) - 25, 50);
+			player[1].getScore().draw(g2d);
+
+			player[0].setBounds(board_x / 8, board_y + board_size, (board_x / 8) * 6, board_y);
+			player[0].draw(g2d);
+
+			player[1].setBounds(board_x + board_size + (board_x / 8), board_y + board_size, (board_x / 8) * 6, board_y);
+			player[1].draw(g2d);
 		}
 		else{
 			roullet_size = Metrics.rectLength(rect.width, rect.height)/2;
-			roullet.drawClip(g2d, rect.width/2, rect.height/2, roullet_size, roullet_size);
+			roullet.setBounds(rect.width/2, rect.height/2, roullet_size, roullet_size);
+			roullet.draw(g2d);
 		}
 		
 		if(paused) {
-			pause_dialog.drawClip(g2d, (rect.width/2) - 300, (rect.height/2) - 150, 600, 300);
+			pause_dialog.setBounds((rect.width/2) - 300, (rect.height/2) - 150, 600, 300);
+			pause_dialog.draw(g2d);
 		}
 		if(game_over) {
-			gameOver_dialog.drawClip(g2d, (rect.width/2) - 300, (rect.height/2) - 150, 600, 300);
+			gameOver_dialog.setBounds((rect.width/2) - 300, (rect.height/2) - 150, 600, 300);
+			gameOver_dialog.draw(g2d);
 		}
 	}
 	@Override
@@ -124,6 +138,7 @@ public class PlayScene implements Scene{
 
 	private void initialize_tictactoe_board() {
 		ticTacToe_board = new TicTacToeBoard(game_play.getGrid_type()) {
+			private static final long serialVersionUID = -8490797535326364956L;
 			@Override
 			public void onNext(int next) {
 				System.out.println("completed = " + isBoardCompleted());
@@ -154,6 +169,7 @@ public class PlayScene implements Scene{
 		}
 		
 		player[p1] = new Human("Player 1") {
+			private static final long serialVersionUID = 350669359808645361L;
 			@Override
 			public TicTacToeBoard getTicTacToeBoard() {
 				return ticTacToe_board;
@@ -167,6 +183,7 @@ public class PlayScene implements Scene{
 		
 		switch (game_play.getGame_mode()) {
 		case PvP: 	player[p2] = new Human("Player 2") {
+			private static final long serialVersionUID = 5032690812356272981L;
 						@Override
 						public TicTacToeBoard getTicTacToeBoard() {
 							return ticTacToe_board;
@@ -178,6 +195,7 @@ public class PlayScene implements Scene{
 					};
 			break;
 		case PvCom: player[p2] = new AI(game_play.getDifficulty()) {
+			private static final long serialVersionUID = 1808574018998206338L;
 					@Override
 					public TicTacToeBoard getTicTacToeBoard() {
 						return ticTacToe_board;
@@ -213,6 +231,7 @@ public class PlayScene implements Scene{
 	private void pauseGame() {
 		paused = true;
 		pause_dialog = new DialogPause() {
+			private static final long serialVersionUID = 5077599183497315251L;
 			@Override
 			public void onRigghtButtonClicked() {
 				resumeGame();
@@ -240,6 +259,7 @@ public class PlayScene implements Scene{
 	private void gameOver() {
 		game_over = true;
 		gameOver_dialog = new DialogGameOver() {
+			private static final long serialVersionUID = 7781619642463379694L;
 			@Override
 			public void onRigghtButtonClicked() {
 				newGame();
