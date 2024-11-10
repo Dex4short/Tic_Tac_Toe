@@ -47,12 +47,12 @@ public class AI_Hard extends AI_TicTacToe {
 
     private int minimax(Symbol[][] board, int depth, boolean isMaximizing, int alpha, int beta, int rows, int cols) {
         String boardState = boardToString(board);
-        if (memo.containsKey(boardState)) return memo.get(boardState);
+        if (memo.containsKey(boardState)) return memo.get(boardState);/// // Return cached result if available
 
         int score = evaluateBoard(rows, cols);
         if (score == 10 || score == -10 || isDraw(rows, cols)) return score;
 
-        if (depth >= 5) return 0; // Limit depth for larger grids
+        if (depth >= 10) return 0; // Limit depth for larger grids avoid slowing down computation
 
         int bestScore = isMaximizing ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 
@@ -64,10 +64,10 @@ public class AI_Hard extends AI_TicTacToe {
                     board[row][col] = null;
 
                     if (isMaximizing) {
-                        bestScore = Math.max(bestScore, currentScore);
+                        bestScore = Math.max(bestScore, currentScore);// Maximize AI score
                         alpha = Math.max(alpha, bestScore);
                     } else {
-                        bestScore = Math.min(bestScore, currentScore);
+                        bestScore = Math.min(bestScore, currentScore);// Minimize Player score
                         beta = Math.min(beta, bestScore);
                     }
 
@@ -78,7 +78,7 @@ public class AI_Hard extends AI_TicTacToe {
         memo.put(boardState, bestScore);
         return bestScore;
     }
-
+    //convert to string to save in memo
     private String boardToString(Symbol[][] board) {
         StringBuilder sb = new StringBuilder();
         for (Symbol[] row : board) {
@@ -99,38 +99,32 @@ public class AI_Hard extends AI_TicTacToe {
     }
 
     private int evaluateBoard(int rows, int cols) {
-        int score = 0;
-        // Check all possible 3-in-a-row combinations for any row, column, or diagonal
         for (int row = 0; row < rows; row++) {
-            score += checkLine(row, 0, 0, 1, rows, cols);  // Rows
+            for (int col = 0; col < cols; col++) {
+                if (checkRow(row, col, rows, cols)) {
+                    return board[row][col] == AI ? 10 : -10;
+                }
+            }
         }
-        for (int col = 0; col < cols; col++) {
-            score += checkLine(0, col, 1, 0, rows, cols);  // Columns
-        }
-        score += checkLine(0, 0, 1, 1, rows, cols);  // Diagonal
-        score += checkLine(0, cols - 1, 1, -1, rows, cols);  // Anti-Diagonal
-
-        return score;
-    }
-
-    // Helper function to check if there are 3 consecutive marks in a line
-    private int checkLine(int startRow, int startCol, int rowDir, int colDir, int rows, int cols) {
-        int aiCount = 0, playerCount = 0;
-
-        for (int i = 0; i < 3; i++) {  // Check the line for 3 consecutive cells
-            int row = startRow + i * rowDir;
-            int col = startCol + i * colDir;
-            if (row >= rows || col >= cols || row < 0 || col < 0) return 0;
-            
-            Symbol cell = board[row][col];
-            if (cell == AI) aiCount++;
-            if (cell == PLAYER) playerCount++;
-        }
-
-        if (aiCount == 3) return 10;  // AI wins
-        if (playerCount == 3) return -10;  // Player wins
         return 0;
     }
 
+    private boolean checkRow(int row, int col, int rows, int cols) {
+        Symbol symbol = board[row][col];
+        if (symbol == null) return false;
     
+        // Check horizontal
+        if (col + 2 < cols && board[row][col + 1] == symbol && board[row][col + 2] == symbol) return true;
+        
+        // Check vertical
+        if (row + 2 < rows && board[row + 1][col] == symbol && board[row + 2][col] == symbol) return true;
+        
+        // Check diagonal (down-right)
+        if (row + 2 < rows && col + 2 < cols && board[row + 1][col + 1] == symbol && board[row + 2][col + 2] == symbol) return true;
+        
+        // Check anti-diagonal (down-left)
+        if (row + 2 < rows && col - 2 >= 0 && board[row + 1][col - 1] == symbol && board[row + 2][col - 2] == symbol) return true;
+    
+        return false;
+    }
 }
