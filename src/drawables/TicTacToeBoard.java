@@ -2,18 +2,16 @@ package drawables;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import enums.Direction;
 import enums.GridType;
-import enums.Orientation;
 import enums.Symbol;
-import interfaces.Drawable;
+import interfaces.DrawableClip;
+import interfaces.Orientation;
 import sound.Sound;
 
-public abstract class TicTacToeBoard extends Rectangle implements Drawable{
-	private static final long serialVersionUID = 8176833577053081124L;
+public abstract class TicTacToeBoard implements DrawableClip{
 	private int rows, cols, box_size, box_gap, next;
 	private TicTacToeBox box[][];
 	private ArrayList<Line> lines;
@@ -42,14 +40,13 @@ public abstract class TicTacToeBoard extends Rectangle implements Drawable{
 	}
 	private int r, c, l;
 	@Override
-	public void draw(Graphics2D g2d) {
-		box_size = width / rows;
+	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
+		box_size = w / rows;
 		box_gap  = (box_size / 50) + 1;
 		
 		for(r=0; r<rows; r++) {
 			for(c=0; c<cols; c++) {
-				box[r][c].setBounds(x + (r * box_size), y + (c * box_size), box_size - box_gap, box_size - box_gap);
-				box[r][c].draw(g2d);
+				box[r][c].drawClip(g2d, x + (r * box_size), y + (c * box_size), box_size - box_gap, box_size - box_gap);
 			}
 		}
 		
@@ -136,7 +133,6 @@ public abstract class TicTacToeBoard extends Rectangle implements Drawable{
 			}
 		}
 	}
-	@SuppressWarnings("unused")
 	@Deprecated
 	private void forEachOrientationOf(int r, int c, Symbol symbol) {
 		for(Orientation orientation: Orientation.values()) {

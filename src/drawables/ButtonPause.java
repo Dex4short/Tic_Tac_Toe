@@ -10,11 +10,11 @@ import java.awt.event.MouseEvent;
 
 import extras.Listeners;
 import interfaces.ButtonModel;
-import interfaces.Drawable;
+import interfaces.DrawableClip;
 import res.Resource;
 import sound.Sound;
 
-public abstract class ButtonPause extends Rectangle implements Drawable, AWTEventListener, ButtonModel{
+public abstract class ButtonPause extends Rectangle implements DrawableClip, AWTEventListener, ButtonModel{
 	private static final long serialVersionUID = 2803333208958227507L;
 	private Color color, highlight;
 	private BasicStroke stroke;
@@ -27,21 +27,21 @@ public abstract class ButtonPause extends Rectangle implements Drawable, AWTEven
 		arc = 5;
 	}
 	@Override
-	public void draw(Graphics2D g2d) {
-		setBounds(x, y, width, height);		
+	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
+		setBounds(x, y, w, h);		
 		
 		g2d.setColor(color);
-		g2d.fillRoundRect(x, y, width, height, arc, arc);
+		g2d.fillRoundRect(x, y, w, h, arc, arc);
 		
 		g2d.setColor(Color.gray);
-		portion_w = width/5;
-		portion_h = height/5;
-		g2d.fillRoundRect(x+portion_w, y+portion_h, portion_w, height-(portion_h*2), arc/2, arc/2);
-		g2d.fillRoundRect(x+(portion_w * 3), y+portion_h, portion_w, height-(portion_h*2), arc/2, arc/2);
+		portion_w = w/5;
+		portion_h = h/5;
+		g2d.fillRoundRect(x+portion_w, y+portion_h, portion_w, h-(portion_h*2), arc/2, arc/2);
+		g2d.fillRoundRect(x+(portion_w * 3), y+portion_h, portion_w, h-(portion_h*2), arc/2, arc/2);
 		
 		g2d.setColor(highlight);
 		g2d.setStroke(stroke);
-		g2d.drawRoundRect(x, y, width, height, arc, arc);
+		g2d.drawRoundRect(x, y, w, h, arc, arc);
 		
 	}
 	@Override

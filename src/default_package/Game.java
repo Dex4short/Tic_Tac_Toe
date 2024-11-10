@@ -3,8 +3,6 @@ package default_package;
 import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ComponentEvent;
-
 import javax.swing.JPanel;
 
 import drawables.LoadingScreen;
@@ -50,6 +48,7 @@ public class Game extends JPanel implements Runnable{
 				AWTEvent.COMPONENT_EVENT_MASK			//for resize event
 		);
 		
+		
 	}
 	@Override
 	public void paintComponent(Graphics g) {
@@ -58,31 +57,19 @@ public class Game extends JPanel implements Runnable{
 		Settings.graphic_settings(g2d);
 		
 		//render current scene
-		scene.draw(g2d);
-		if(scene.next() != null) {
-			scene = scene.next();
-		}
+		scene.paint(g2d);
+		if(scene.next() != null) scene = scene.next();
 		
 		if(loading_screen.isLoading()) {
-			loading_screen.setBounds(0, 0, getWidth(), getHeight());
-			loading_screen.draw(g2d);
+			loading_screen.drawClip(g2d, 0, 0, getWidth(), getHeight());
 		}
 	}
 	@Override
-	protected void processEvent(AWTEvent event) {
-		if(event instanceof ComponentEvent) {
-			ComponentEvent e = (ComponentEvent)event;
-			
-			if(e.getID() == ComponentEvent.COMPONENT_RESIZED) {
-				Settings.W = getWidth();
-				Settings.H = getHeight();
-			}
-		}
+	protected void processEvent(AWTEvent e) {
 		if(loading_screen.isLoading()) return;
 		
-		scene.eventDispatched(event);
-		
-		super.processEvent(event);
+		scene.eventDispatched(e);
+		super.processEvent(e);
 	}
 	public void start() {
 		running = true;
@@ -118,6 +105,12 @@ public class Game extends JPanel implements Runnable{
 					Thread.currentThread().interrupt();
 				}
 			}
-		}		
+		}
+		
+		
 	}
+	
+
+	
+
 }

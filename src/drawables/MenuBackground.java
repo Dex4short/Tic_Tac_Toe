@@ -3,15 +3,13 @@ package drawables;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.util.Random;
 
 import extras.RGBA;
-import interfaces.Drawable;
+import interfaces.DrawableClip;
 import res.Resource;
 
-public class MenuBackground extends Rectangle implements Drawable{
-	private static final long serialVersionUID = -3739618271336656198L;
+public class MenuBackground implements DrawableClip{
 	private Random r;
 	private Image particle_img[];
 	private int particle_count=10;
@@ -27,9 +25,9 @@ public class MenuBackground extends Rectangle implements Drawable{
 
 	}
 	@Override
-	public void draw(Graphics2D g2d) {
+	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
 		g2d.setColor(Color.white);
-		g2d.fillRect(x, y, width, height);
+		g2d.fillRect(x, y, w, h);
 		
 		if(particle == null) {
 			particle = new Particle[particle_count];
@@ -37,8 +35,8 @@ public class MenuBackground extends Rectangle implements Drawable{
 			for(int p=0; p<particle_count; p++) {
 				particle[p] = new Particle();
 				particle[p].img = particle_img[p%2];
-				particle[p].x = r.nextInt(width);
-				particle[p].y = r.nextInt(height);
+				particle[p].x = r.nextInt(w);
+				particle[p].y = r.nextInt(h);
 				particle[p].size = 50 + r.nextInt(100);
 				particle[p].deg = r.nextInt(360);
 				particle[p].rot = 0;
@@ -68,16 +66,16 @@ public class MenuBackground extends Rectangle implements Drawable{
 				p.x = -p.size;
 				p.deg = 315 + r.nextInt(90);
 			}
-			else if(p.x>width+p.size) {//east
-				p.x = width+p.size;
+			else if(p.x>w+p.size) {//east
+				p.x = w+p.size;
 				p.deg = 135 + r.nextInt(90);
 			}
 			else if(p.y<-p.size) {//north
 				p.y = -p.size;
 				p.deg = 45 + r.nextInt(90);
 			}
-			else if(p.y>height+p.size) {//south
-				p.y = height+p.size;
+			else if(p.y>h+p.size) {//south
+				p.y = h+p.size;
 				p.deg = 225 + r.nextInt(90);
 			}
 			

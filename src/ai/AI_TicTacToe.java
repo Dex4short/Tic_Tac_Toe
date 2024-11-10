@@ -42,19 +42,17 @@ public class AI_TicTacToe {
     }
     public AI_Move randomMove(TicTacToeBoard tictactoe_board, int rows, int cols) {
     	Random random = new Random();
-    	int
+    	int 
     	moveRow = random.nextInt(rows),
     	moveCol = random.nextInt(cols);
-
-    	if(isBoardHasVacant(tictactoe_board, rows, cols)) {
+    	
+    	if(isBoardEmpty(tictactoe_board, rows, cols) == false) {
         	while(tictactoe_board.getBox(moveRow, moveCol).getSymbol() != null) {
-            	moveRow = random.nextInt(rows);
-            	moveCol = random.nextInt(cols);
+        		return new AI_Move(moveRow, moveCol);
         	}
-    		return new AI_Move(moveRow, moveCol);
     	}
     	
-    	return null;
+		return null;
     }    
     public boolean isBoardEmpty(TicTacToeBoard tictactoe_board, int rows, int cols) {
     	for(int r=0; r<rows; r++) {
@@ -65,15 +63,5 @@ public class AI_TicTacToe {
     		}
     	}
     	return true;
-    }
-    public boolean isBoardHasVacant(TicTacToeBoard tictactoe_board, int rows, int cols) {
-    	for(int r=0; r<rows; r++) {
-    		for(int c=0; c<cols; c++) {
-    			if(tictactoe_board.getBox(r, c).getSymbol() == null) {
-    				return true;
-    			}
-    		}
-    	}
-    	return false;
     }
 }

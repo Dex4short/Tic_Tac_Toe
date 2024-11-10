@@ -2,16 +2,14 @@ package drawables;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.util.Random;
 
 import enums.GameMode;
-import interfaces.Drawable;
+import interfaces.DrawableClip;
 import res.Resource;
 import sound.Sound;
 
-public abstract class Roullet extends Rectangle implements Drawable{
-	private static final long serialVersionUID = 4314405951678803452L;
+public abstract class Roullet implements DrawableClip{
 	private Color color[];
 	private int pie_n;
 	private float deg, deg_iterate, deg_increment;
@@ -53,8 +51,6 @@ public abstract class Roullet extends Rectangle implements Drawable{
 		}
 		
 		arrow = new Arrow(pie) {
-			private static final long serialVersionUID = 8221753831240823194L;
-
 			@Override
 			public void onPoint(Pie pie) {
 				selected_pie = pie;
@@ -64,20 +60,18 @@ public abstract class Roullet extends Rectangle implements Drawable{
 		
 	}
 	@Override
-	public void draw(Graphics2D g2d) {
+	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
 		if(!show_roulet) return; 
 		
 		g2d.translate(x, y);
 		
 		g2d.rotate(Math.toRadians(deg));
 		for(pie_n=0; pie_n<pie.length; pie_n++) {
-			pie[pie_n].setBounds(0, 0, width, height);
-			pie[pie_n].draw(g2d);
+			pie[pie_n].drawClip(g2d, 0, 0, w, h);
 		}
 		g2d.rotate(Math.toRadians(-deg));
 		
-		arrow.setBounds(-width/16, -height/16, width/8, height/8);
-		arrow.draw(g2d);		
+		arrow.drawClip(g2d, -w/16, -h/16, w/8, h/8);		
 		g2d.translate(-x, -y);
 		
 		if(deg_increment != 0) {
@@ -127,8 +121,7 @@ public abstract class Roullet extends Rectangle implements Drawable{
 	
 	public abstract void onRoulletStopped();
 	
-	public class Pie extends Rectangle implements Drawable{
-		private static final long serialVersionUID = 8141509693218545830L;
+	public class Pie implements DrawableClip{
 		private String name;
 		private Color color;
 		private float angle, arc;
@@ -140,19 +133,19 @@ public abstract class Roullet extends Rectangle implements Drawable{
 			this.arc = arc;
 		}
 		@Override
-		public void draw(Graphics2D g2d) {
+		public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
 			g2d.translate(x, y);
 			
 			
 			g2d.setColor(color);
-			g2d.fillArc(-(width/2), -(height/2), width, height, Math.round(angle-(arc/2)), Math.round(arc));
+			g2d.fillArc(-(w/2), -(h/2), w, h, Math.round(angle-(arc/2)), Math.round(arc));
 
 			g2d.rotate(Math.toRadians(-angle));
 			g2d.setColor(Color.white);
 			g2d.setFont(Resource.font[2]);
 			g2d.drawString(
 					name,
-					width/5,
+					w/5,
 					g2d.getFontMetrics().getAscent()/2
 			);
 			g2d.rotate(Math.toRadians(angle));
@@ -166,8 +159,7 @@ public abstract class Roullet extends Rectangle implements Drawable{
 		roullet_stopped = true;
 		Sound.playOnStopRoullet();
 	}
-	private abstract class Arrow extends Rectangle implements Drawable{
-		private static final long serialVersionUID = 495746806885898789L;
+	private abstract class Arrow implements DrawableClip{
 		private float arrow_angle;
 		private Pie pie[];
 
@@ -176,13 +168,13 @@ public abstract class Roullet extends Rectangle implements Drawable{
 			arrow_angle = 0;
 		}
 		@Override
-		public void draw(Graphics2D g2d) {
+		public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
 			g2d.rotate(Math.toRadians(arrow_angle));
 			g2d.setColor(Color.DARK_GRAY);
-			g2d.fillOval(-width/2, -height/2, width, height);
+			g2d.fillOval(-w/2, -h/2, w, h);
 			g2d.fillPolygon(
-					new int[] {0, width, 0},
-					new int[] {-height/2, 0, height/2},
+					new int[] {0, w, 0},
+					new int[] {-h/2, 0, h/2},
 					3
 			);
 			g2d.rotate(Math.toRadians(-arrow_angle));

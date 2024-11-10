@@ -9,7 +9,6 @@ import interfaces.Action;
 import scenes.PlayScene;
 
 public abstract class AI extends Player implements Action {
-	private static final long serialVersionUID = 6550487556425386480L;
 	private AI_TicTacToe ai_tictactoe;
 	
     public AI(Difficulty difficulty) {
@@ -32,13 +31,13 @@ public abstract class AI extends Player implements Action {
 				
 				AI_Move ai_move = ai_tictactoe.make_move(tictactoe_board);
 				if(ai_move != null) {
-					new Timing().sleep(500);
+					new Timing().sleep(1000);
 					tictactoe_board.getBox(ai_move.row, ai_move.col).setHighlighted(true);
 					
-					new Timing().sleep(500);
+					new Timing().sleep(1000);
 					tictactoe_board.getBox(ai_move.row, ai_move.col).setSymbol(ai_tictactoe.assigned_symbol);
 
-					new Timing().sleep(500);
+					new Timing().sleep(1000);
 					tictactoe_board.getBox(ai_move.row, ai_move.col).setHighlighted(false);
 		            System.out.println("AI plays at position: " + ai_move.row + ", " + ai_move.col);
 				}

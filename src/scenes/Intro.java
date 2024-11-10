@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 
+import default_package.Game;
 import interfaces.Scene;
 import res.Resource;
 import sound.Sound;
@@ -25,7 +26,7 @@ public class Intro implements Scene{
 		Sound.playOnIntro();
 	}
 	@Override
-	public void draw(Graphics2D g2d) {
+	public void paint(Graphics2D g2d) {
 		bounds = g2d.getClipBounds();
 		
 		g2d.setColor(Color.white);

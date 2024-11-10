@@ -5,8 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import enums.Direction;
-import enums.Orientation;
 import interfaces.Drawable;
+import interfaces.Orientation;
 import res.Resource;
 
 public class Line implements Drawable{

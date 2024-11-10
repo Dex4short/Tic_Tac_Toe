@@ -15,13 +15,12 @@ import enums.GameMode;
 import enums.GridType;
 import interfaces.Action;
 import interfaces.ButtonModel;
-import interfaces.Drawable;
+import interfaces.DrawableClip;
 import objects.GamePlay;
 import res.Resource;
 import sound.Sound;
 
-public abstract class MenuSelection extends Rectangle implements Drawable, AWTEventListener{
-	private static final long serialVersionUID = -3706535517360659836L;
+public abstract class MenuSelection implements DrawableClip, AWTEventListener{
 	private int selection_x, selection_y,selection_w, selection_h, selection_arc=20, s;
 	private Selection selections[];
 	private BasicStroke stroke;
@@ -45,11 +44,11 @@ public abstract class MenuSelection extends Rectangle implements Drawable, AWTEv
 		game_play = new GamePlay();
 	}
 	@Override
-	public void draw(Graphics2D g2d) {
-		selection_w = width/3;
-		selection_h = height/3;
-		selection_x = x + (width/2) - (selection_w/2);
-		selection_y = y + (int)(height*0.66) - (selection_h/2);
+	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
+		selection_w = w/3;
+		selection_h = h/3;
+		selection_x = x + (w/2) - (selection_w/2);
+		selection_y = y + (int)(h*0.66) - (selection_h/2);
 		
 		g2d.setColor(Resource.main_color[2]);
 		g2d.fillRoundRect(selection_x, selection_y, selection_w, selection_h, selection_arc, selection_arc);
@@ -71,17 +70,17 @@ public abstract class MenuSelection extends Rectangle implements Drawable, AWTEv
 	
 	private void drawSelections(Graphics2D g2d, int x, int y, int w, int h) {
 		for(s=0; s<selections.length; s++) {
-			selections[s].setBounds(
-					x + 5, 											//x
-					y + 5 + (s*((h - 10) / selections.length)),		//y
-					w - 10, 										//width
-					(h/selections.length) - 5						//height
+			selections[s].drawClip(
+					g2d, 
+					x + 5, 
+					y + 5 + (s*((h - 10) / selections.length)),
+					w - 10, 
+					(h/selections.length) - 5
 			);
-			selections[s].draw(g2d);
 		}
 	}
 	
-	public abstract class Selection extends Rectangle implements Drawable,AWTEventListener,ButtonModel,Action{
+	public abstract class Selection extends Rectangle implements DrawableClip,AWTEventListener,ButtonModel,Action{
 		private static final long serialVersionUID = -7267045785208769956L;
 		private int arc=20;
 		private AlphaComposite alpha_composite, normal_composite;
@@ -96,7 +95,9 @@ public abstract class MenuSelection extends Rectangle implements Drawable, AWTEv
 			normal_composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
 		}
 		@Override
-		public void draw(Graphics2D g2d) {			
+		public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
+			setBounds(x, y, w, h);
+			
 			if(isDisabled()) {
 				g2d.setComposite(alpha_composite);
 			}
@@ -110,14 +111,14 @@ public abstract class MenuSelection extends Rectangle implements Drawable, AWTEv
 			else {
 				g2d.setColor(Resource.main_color[0]);
 			}
-			g2d.fillRoundRect(x, y, width, height, arc, arc);
+			g2d.fillRoundRect(x, y, w, h, arc, arc);
 			
 			g2d.setFont(font);
 			g2d.setColor(Resource.main_color[2]);
 			g2d.drawString(
 					text,
-					x + (width/2) - (g2d.getFontMetrics().stringWidth(text)/2),
-					y + (height/2) + (g2d.getFontMetrics().getAscent()/2)
+					x + (w/2) - (g2d.getFontMetrics().stringWidth(text)/2),
+					y + (h/2) + (g2d.getFontMetrics().getAscent()/2)
 			);
 			
 			if(isDisabled()) {

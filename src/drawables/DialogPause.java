@@ -5,20 +5,20 @@ import java.awt.Graphics2D;
 
 import extras.RGBA;
 import res.Resource;
+import scenes.PlayScene;
 
 public abstract class DialogPause extends Dialog{
-	private static final long serialVersionUID = 4972697442630921194L;
 	protected int alpha=0, alpha_iterate=0;
 
 	public DialogPause() {
 		super("Game Paused", "Main Menu", "Resume Game");
 	}
 	@Override
-	public void draw(Graphics2D g2d) {		
+	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {		
 		draw_pause_background(g2d);
 		
 		if(alpha_iterate==0 && alpha>0) {
-			super.draw(g2d);
+			super.drawClip(g2d, x, y, w, h);
 		}
 	}
 	@Override
@@ -42,12 +42,12 @@ public abstract class DialogPause extends Dialog{
 		g2d.fill(g2d.getClipBounds());
 
 		alpha += alpha_iterate;
-		if(alpha > 128) {
+		if(alpha >= 128) {
 			alpha = 128;
 			alpha_iterate = 0;
 			onShown(true);
 		}
-		else if(alpha < 0) {
+		else if(alpha <= 0) {
 			alpha = 0;
 			alpha_iterate = 0;
 			onShown(false);

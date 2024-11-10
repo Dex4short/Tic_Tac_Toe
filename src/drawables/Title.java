@@ -3,19 +3,14 @@ package drawables;
 import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.Shape;
 
 import extras.Metrics;
 import extras.Shapes;
-import interfaces.Drawable;
+import interfaces.DrawableClip;
 import res.Resource;
 
-public class Title extends Rectangle implements Drawable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1992544474973826931L;
+public class Title implements DrawableClip{
 	private int title_w, title_h, font_size, bx, by, bar_size, bar_gap=1 ,bar_arc=5, bar_n=0;
 	private String title;
 	private Font font;
@@ -29,7 +24,7 @@ public class Title extends Rectangle implements Drawable{
 		execute_once = true;
 	}
 	@Override
-	public void draw(Graphics2D g2d) {
+	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
 		if(execute_once) {
 			font_size  = Metrics.rectLength(800, 600) / 8;
 			font       = new Font("Kreativ", Font.BOLD, (int)(font_size));
@@ -46,7 +41,7 @@ public class Title extends Rectangle implements Drawable{
 			g2d.setFont(font);
 		}
 		
-		g2d.translate(x+((width/2)-(title_w/2)), y+(height/3));
+		g2d.translate(x+((w/2)-(title_w/2)), y+(h/3));
 		
 		g2d.setColor(Resource.main_color[2]);
 		g2d.fill(glyph);
@@ -68,9 +63,9 @@ public class Title extends Rectangle implements Drawable{
 		g2d.setStroke(stroke);
 		g2d.draw(glyph);
 		
-		g2d.translate(-(x+((width/2)-(title_w/2))), -(y+(height/3)));
+		g2d.translate(-(x+((w/2)-(title_w/2))), -(y+(h/3)));
 		
-		g2d.setClip(x, y ,width , height);
+		g2d.setClip(x, y ,w , h);
 		
 	}
 }

@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
 public class Settings {
-	public static int W,H;
 	
 	private Settings() {
 		

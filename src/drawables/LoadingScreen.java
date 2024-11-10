@@ -2,15 +2,13 @@ package drawables;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 
 import extras.Timing;
-import interfaces.Drawable;
+import interfaces.DrawableClip;
 import res.Resource;
 import sound.Sound;
 
-public class LoadingScreen extends Rectangle implements Drawable{
-	private static final long serialVersionUID = 2712795796358987730L;
+public class LoadingScreen implements DrawableClip{
 	private String text;
 	private Curtain curtains[];
 	private int c;
@@ -26,10 +24,9 @@ public class LoadingScreen extends Rectangle implements Drawable{
 		curtains_moving = false;
 	}
 	@Override
-	public void draw(Graphics2D g2d) {
+	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
 		for(c=0; c<curtains.length; c++) {
-			curtains[c].setBounds(x + (c * (width/curtains.length)), y, width/curtains.length, height);
-			curtains[c].draw(g2d);
+			curtains[c].drawClip(g2d, x + (c * (w/curtains.length)), y, w/curtains.length, h);
 		}
 		
 		if(curtains_open) return;
@@ -38,8 +35,8 @@ public class LoadingScreen extends Rectangle implements Drawable{
 		g2d.setFont(Resource.font[0]);
 		g2d.drawString(
 				text,
-				x + (width/2) - (g2d.getFontMetrics().stringWidth(text)/2),
-				y + (height/2) + (g2d.getFontMetrics().getAscent()/2)
+				x + (w/2) - (g2d.getFontMetrics().stringWidth(text)/2),
+				y + (h/2) + (g2d.getFontMetrics().getAscent()/2)
 		);
 		
 	}
@@ -101,7 +98,6 @@ public class LoadingScreen extends Rectangle implements Drawable{
 		curtains = new Curtain[8];
 		for(c=0; c<curtains.length; c++) {
 			curtains[c] = new Curtain() {
-				private static final long serialVersionUID = -4745355448388613091L;
 				final int C = c;
 				@Override
 				public Curtain left() {
@@ -147,8 +143,7 @@ public class LoadingScreen extends Rectangle implements Drawable{
 			};
 		}
 	}
-	private abstract class Curtain extends Rectangle implements Drawable{
-		private static final long serialVersionUID = 6326157542946879823L;
+	private abstract class Curtain implements DrawableClip{
 		private int r, g, b, a, tick;
 		private boolean open, move;
 		
@@ -162,7 +157,7 @@ public class LoadingScreen extends Rectangle implements Drawable{
 			 move = false;
 		}
 		@Override
-		public void draw(Graphics2D g2d) {			
+		public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {			
 			if(move) {
 				tick--;
 				
@@ -201,7 +196,7 @@ public class LoadingScreen extends Rectangle implements Drawable{
 
 
 			g2d.setColor(new Color(r,g,b,a));
-			g2d.fillRect(x, y, width, height);
+			g2d.fillRect(x, y, w, h);
 		}
 		public abstract Curtain left();
 		public abstract Curtain right();
