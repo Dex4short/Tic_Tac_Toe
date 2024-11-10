@@ -60,7 +60,7 @@ public abstract class CountDownTimer extends Point implements Drawable{
 	public void set(int seconds, int miliSeconds) {
 		this.seconds = seconds;
 		this.miliSeconds = miliSeconds;
-		deg_iterate = (360 / ((seconds*60) + miliSeconds)) + 1;
+		deg_iterate = (360f / ((seconds*60f) + miliSeconds)) + 1f;
 	}
 	public void reset() {
 		stop();
@@ -83,7 +83,7 @@ public abstract class CountDownTimer extends Point implements Drawable{
 				}
 			}
 
-			deg = (deg_iterate * ((sec*60) + mili_sec)) + 1;
+			deg = (deg_iterate * ((sec*60f) + mili_sec));
 		}
 	}
 	public void timeOut() {

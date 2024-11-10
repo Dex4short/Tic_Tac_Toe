@@ -141,6 +141,8 @@ public class PlayScene extends Rectangle implements Scene, GameLifeLine{
 				initialize_challenge();
 				
 				if(challenge != null) challenge.gameStart();
+				
+				Sound.playOnPlayeScene();
 			}
 		};
 		
@@ -148,7 +150,6 @@ public class PlayScene extends Rectangle implements Scene, GameLifeLine{
 			roullet.show(true);
 			roullet.roll();
 		});
-		Sound.playOnPlayeScene();
 	}
 	@Override
 	public void onPauseGame() {

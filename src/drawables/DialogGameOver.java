@@ -42,7 +42,7 @@ public abstract class DialogGameOver extends DialogPause{
 					Sound.playOnPlayerWins();
 				}
 				else {
-					Sound.playeOnPlayerLoses();
+					Sound.playOnPlayerLoses();
 				}
 			}
 		}
