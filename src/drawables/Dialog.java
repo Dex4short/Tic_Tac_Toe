@@ -4,12 +4,14 @@ import java.awt.AWTEvent;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.AWTEventListener;
 
-import interfaces.DrawableClip;
+import interfaces.Drawable;
 import res.Resource;
 
-public abstract class Dialog implements DrawableClip, AWTEventListener{
+public abstract class Dialog extends Rectangle implements Drawable, AWTEventListener{
+	private static final long serialVersionUID = -3659500411363550871L;
 	private String title;
 	private int arc;
 	private BasicStroke stroke;
@@ -39,36 +41,37 @@ public abstract class Dialog implements DrawableClip, AWTEventListener{
 		
 	}
 	@Override
-	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
+	public void draw(Graphics2D g2d) {
 		g2d.setColor(Resource.main_color[2]);
-		g2d.fillRoundRect(x, y, w, h, arc, arc);
+		g2d.fillRoundRect(x, y, width, height, arc, arc);
 		
 		g2d.setColor(Color.black);
 		g2d.setFont(Resource.font[3]);
 		g2d.drawString(
 				title,
-				x + (w/2) - (g2d.getFontMetrics().stringWidth(title)/2), 
-				y + (h/3)
+				x + (width/2) - (g2d.getFontMetrics().stringWidth(title)/2), 
+				y + (height/3)
 		);
 		
-		btn_left.drawClip(
-				g2d, 						//Graphics2D
-				x + (w/4) - (w/6),			//x
-				y + ((h/4) * 3) - (h/16), 	//y
-				(w/3), 						//width
-				h/8							//height
+		btn_left.setBounds(
+				x + (width/4) - (width/6),			//x
+				y + ((height/4) * 3) - (height/16), //y
+				(width/3), 							//width
+				height/8							//height
 		);
-		btn_right.drawClip(
-				g2d, 
-				x + ((w/4) * 3) - (w/6), 
+		btn_left.draw(g2d);
+		
+		btn_right.setBounds( 
+				x + ((width/4) * 3) - (width/6), 
 				btn_left.y, 
 				btn_left.width, 
 				btn_left.height
 		);
+		btn_right.draw(g2d);
 
 		g2d.setColor(Resource.main_color[0]);
 		g2d.setStroke(stroke);
-		g2d.drawRoundRect(x, y, w, h, arc, arc);
+		g2d.drawRoundRect(x, y, width, height, arc, arc);
 	}
 	@Override
 	public void eventDispatched(AWTEvent event) {

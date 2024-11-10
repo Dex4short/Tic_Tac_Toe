@@ -7,7 +7,6 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 
 public class Sound {
-    
     private static Thread mainMenuThread;
     private static AdvancedPlayer mainMenuPlayer;
     private static boolean isMainMenuPlaying = false;
@@ -47,7 +46,6 @@ public class Sound {
 
     public static void playOnLoading() { // 1 sec
         System.out.println("Loading.mp3");
-       
     }
 
     public static void playOnLoadingCurtainsClosed() {
@@ -58,8 +56,6 @@ public class Sound {
         System.out.println("Main Menu.mp3");
         
         stopInGameAudio();
-
-        stopMainMenuAudio(); // Ensure any existing audio is stopped before starting new one
 
         mainMenuThread = new Thread(() -> {
             try {
@@ -147,9 +143,12 @@ public class Sound {
 
         stopMainMenuAudio(); // Ensure any existing audio is stopped before starting new one
 
+        if(inGameThread != null) {
+        	stopInGameAudio();
+        }
         inGameThread = new Thread(() -> {
             try {
-                InputStream audioStream = Sound.class.getResourceAsStream("ingameSound.mp3");
+                InputStream audioStream = Sound.class.getResourceAsStream("playscene.mp3");
                 if (audioStream == null) {
                     System.out.println("Audio file not found!");
                     return;
@@ -170,14 +169,11 @@ public class Sound {
         inGameThread.start();
     }
     
-    public static void stopInGameAudio() {
-    	
+    private static void stopInGameAudio() {
     	System.out.println("Stoping ingame");
-    	
     	
         if (isInGamePlaying && inGamePlayer != null) {
             inGameThread.interrupt(); // Interrupt the main menu thread
-            
             // Closing AdvancedPlayer to stop it
             try {
                 inGamePlayer.close();
@@ -193,6 +189,25 @@ public class Sound {
     // Additional sound methods
     public static void playOnRollRoullet() {
         System.out.println("Roulet Roll.mp3");
+        stopMainMenuAudio(); // Ensure any existing audio is stopped before starting new one
+        
+        new Thread(() -> {
+            try {
+                InputStream audioStream = Sound.class.getResourceAsStream("rouletSound.mp3");
+                if (audioStream == null) {
+                    System.out.println("Audio file not found!");
+                    return;
+                }
+
+                BufferedInputStream bufferedIn = new BufferedInputStream(audioStream);
+                AdvancedPlayer player = new AdvancedPlayer(bufferedIn);
+                player.play();
+                
+            } catch (JavaLayerException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
     }
 
     public static void playOnStopRoullet() {
@@ -263,13 +278,64 @@ public class Sound {
 
     public static void playOnPlayerWins() {
         System.out.println("Player Wins.mp3");
+        stopInGameAudio();
+        new Thread(() -> {
+            try {
+                InputStream audioStream = Sound.class.getResourceAsStream("winnerSound.mp3");
+                if (audioStream == null) {
+                    System.out.println("Audio file not found!");
+                    return;
+                }
+
+                BufferedInputStream bufferedIn = new BufferedInputStream(audioStream);
+                AdvancedPlayer player = new AdvancedPlayer(bufferedIn);
+                player.play();
+
+            } catch (JavaLayerException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public static void playOnPlayerLoses() {
         System.out.println("Player Lose.mp3");
+        stopInGameAudio();
+        new Thread(() -> {
+            try {
+                InputStream audioStream = Sound.class.getResourceAsStream("gameOver.mp3");
+                if (audioStream == null) {
+                    System.out.println("Audio file not found!");
+                    return;
+                }
+
+                BufferedInputStream bufferedIn = new BufferedInputStream(audioStream);
+                AdvancedPlayer player = new AdvancedPlayer(bufferedIn);
+                player.play();
+
+            } catch (JavaLayerException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public static void playOnDraw() {
         System.out.println("Draw.mp3");
+        stopInGameAudio();
+        new Thread(() -> {
+            try {
+                InputStream audioStream = Sound.class.getResourceAsStream("victorySound.mp3");
+                if (audioStream == null) {
+                    System.out.println("Audio file not found!");
+                    return;
+                }
+
+                BufferedInputStream bufferedIn = new BufferedInputStream(audioStream);
+                AdvancedPlayer player = new AdvancedPlayer(bufferedIn);
+                player.play();
+
+            } catch (JavaLayerException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

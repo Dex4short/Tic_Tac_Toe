@@ -7,7 +7,8 @@ import java.awt.event.MouseEvent;
 import drawables.TicTacToeBox;
 
 public abstract class Human extends Player implements AWTEventListener{
-
+	private static final long serialVersionUID = -567864428098059125L;
+	
 	public Human(String name) {
 		super(name);
 	}

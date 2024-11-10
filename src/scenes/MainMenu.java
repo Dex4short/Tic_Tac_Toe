@@ -2,25 +2,29 @@ package scenes;
 
 import java.awt.AWTEvent;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
 
 import default_package.Game;
 import drawables.MenuBackground;
 import drawables.MenuSelection;
 import drawables.Title;
-import interfaces.DrawableClip;
+import extras.Settings;
+import interfaces.Drawable;
 import interfaces.Scene;
 import objects.GamePlay;
 import sound.Sound;
 
-public class MainMenu implements Scene{
-	private int w,h;
-	private DrawableClip background, title, menu_selection;
+public class MainMenu extends Rectangle implements Scene{
+	private static final long serialVersionUID = 7186429339437146539L;
+	private Drawable background, title, menu_selection;
 	private Scene next_scene;
 
 	public MainMenu() {
 		background     = new MenuBackground();
 		title 		   = new Title();
 		menu_selection = new MenuSelection() {
+			private static final long serialVersionUID = 2531560105775009568L;
 			@Override
 			public void onPlay(GamePlay game_play) {
 				Game.loading_screen.load(new Runnable() {
@@ -35,17 +39,17 @@ public class MainMenu implements Scene{
 				//TODO
 			}
 		};
+		onResized(Settings.W, Settings.H);
 		
 		Sound.playOnMainMenu();
 	}
 	@Override
-	public void paint(Graphics2D g2d) {
-		w = g2d.getClipBounds().width;
-		h = g2d.getClipBounds().height;
+	public void draw(Graphics2D g2d) {
+		setBounds(g2d.getClipBounds());
 		
-		background.drawClip(g2d, 0, 0, w, h);
-		title.drawClip(g2d, 0, 0, w, h);
-		menu_selection.drawClip(g2d, 0, 0, w, h);
+		background.draw(g2d);
+		title.draw(g2d);
+		menu_selection.draw(g2d);
 	}
 	@Override
 	public Scene next() {
@@ -54,5 +58,18 @@ public class MainMenu implements Scene{
 	@Override
 	public void eventDispatched(AWTEvent event) {
 		((MenuSelection)menu_selection).eventDispatched(event);
+		
+		if(event instanceof ComponentEvent) {
+			ComponentEvent e = (ComponentEvent)event;
+			
+			if(e.getID() == ComponentEvent.COMPONENT_RESIZED) {
+				onResized(width, height);
+			}
+		}
+	}
+	public void onResized(int w, int h) {
+		((MenuBackground)background).setBounds(0, 0, w, h);
+		((Title)title).setBounds(0, 0, w, h);
+		((MenuSelection)menu_selection).setBounds(0, 0, w, h);
 	}
 }

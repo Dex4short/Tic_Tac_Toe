@@ -10,11 +10,11 @@ import java.util.TimerTask;
 
 import enums.Symbol;
 import extras.RGBA;
-import interfaces.DrawableClip;
+import interfaces.Drawable;
 import res.Resource;
 import sound.Sound;
 
-public class TicTacToeBox  extends Rectangle implements DrawableClip{
+public class TicTacToeBox  extends Rectangle implements Drawable{
 	private static final long serialVersionUID = 5682340612501179503L;
 	private Symbol symbol;
 	private Color color, highlight;
@@ -29,20 +29,20 @@ public class TicTacToeBox  extends Rectangle implements DrawableClip{
 		highlight = new Color(0,0,0,0);
 	}
 	@Override
-	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
-		arc = w/8;
+	public void draw(Graphics2D g2d) {
+		arc = width/8;
 		stroke = new BasicStroke(arc);
-		setBounds(x, y, w, h);
+		setBounds(x, y, width, height);
 		
 		g2d.setColor(color);
-		g2d.fillRoundRect(x, y, w, h, arc, arc);
+		g2d.fillRoundRect(x, y, width, height, arc, arc);
 		
 		g2d.setColor(highlight);
 		g2d.setStroke(stroke);
-		g2d.drawRoundRect(x+arc, y+arc, w-(arc*2), h-(arc*2), arc, arc);
+		g2d.drawRoundRect(x+arc, y+arc, width-(arc*2), height-(arc*2), arc, arc);
 		
 		if(symbol != null) {
-			g2d.drawImage(symbol.img, x+arc, y+arc, w-(arc*2), h-(arc*2), null);
+			g2d.drawImage(symbol.img, x+arc, y+arc, width-(arc*2), height-(arc*2), null);
 		}
 	}
 	public void setVisible(boolean toVisible) {

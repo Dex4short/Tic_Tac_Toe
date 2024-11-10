@@ -11,11 +11,11 @@ import java.awt.event.MouseEvent;
 import extras.Listeners;
 import interfaces.Action;
 import interfaces.ButtonModel;
-import interfaces.DrawableClip;
+import interfaces.Drawable;
 import res.Resource;
 import sound.Sound;
 
-public abstract class Button extends Rectangle implements DrawableClip, AWTEventListener, ButtonModel, Action{
+public abstract class Button extends Rectangle implements Drawable, AWTEventListener, ButtonModel, Action{
 	private static final long serialVersionUID = 2803333208958227507L;
 	private String btn_name;
 	private Color bg_color, border_color, color, highlight, txt_color;
@@ -32,23 +32,22 @@ public abstract class Button extends Rectangle implements DrawableClip, AWTEvent
 		arc = 10;
 	}
 	@Override
-	public void drawClip(Graphics2D g2d, int x, int y, int w, int h) {
-		setBounds(x, y, w, h);		
+	public void draw(Graphics2D g2d) {
 		
 		g2d.setColor(bg_color);
-		g2d.fillRoundRect(x, y, w, h, arc, arc);
+		g2d.fillRoundRect(x, y, width, height, arc, arc);
 		
 		g2d.setColor(txt_color);
 		g2d.setFont(Resource.font[1]);
 		g2d.drawString(
 				btn_name,
-				x + (w/2) - (g2d.getFontMetrics().stringWidth(btn_name)/2),
-				y + (h/2) + (g2d.getFontMetrics().getAscent()/2)
+				x + (width/2) - (g2d.getFontMetrics().stringWidth(btn_name)/2),
+				y + (height/2) + (g2d.getFontMetrics().getAscent()/2)
 		);
 		
 		g2d.setColor(border_color);
 		g2d.setStroke(stroke);
-		g2d.drawRoundRect(x, y, w, h, arc, arc);
+		g2d.drawRoundRect(x, y, width, height, arc, arc);
 	
 	}
 	@Override
