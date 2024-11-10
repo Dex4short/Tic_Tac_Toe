@@ -16,11 +16,9 @@ public class AI_Easy extends AI_TicTacToe {
         if (winningMove != null) {
             return winningMove;
         }
-
         // Fall back to a random move
         return super.onMakeMove(tictactoe_board, rows, cols);
     }
-
     // Method to find a winning move for the given symbol
     private AI_Move findWinningMove(Symbol symbol, int rows, int cols) {
         for (int r = 0; r < rows; r++) {
@@ -37,12 +35,10 @@ public class AI_Easy extends AI_TicTacToe {
         }
         return null; // No winning move found
     }
-
     // Helper function to check if placing a symbol at (row, col) is a winning move
     private boolean isWinningMove(int row, int col, Symbol symbol) {
         return checkRow(row, symbol) || checkColumn(col, symbol) || checkDiagonals(symbol);
     }
-
     private boolean checkRow(int row, Symbol symbol) {
         for (int col = 0; col < board[row].length; col++) {
             if (board[row][col] != symbol) {
@@ -51,7 +47,6 @@ public class AI_Easy extends AI_TicTacToe {
         }
         return true;
     }
-
     private boolean checkColumn(int col, Symbol symbol) {
         for (int row = 0; row < board.length; row++) {
             if (board[row][col] != symbol) {
@@ -60,7 +55,6 @@ public class AI_Easy extends AI_TicTacToe {
         }
         return true;
     }
-
     private boolean checkDiagonals(Symbol symbol) {
         boolean diagonal1 = true, diagonal2 = true;
         for (int i = 0; i < board.length; i++) {

@@ -30,6 +30,7 @@ public class Game extends JPanel implements Runnable{
 		
 		//Game Introduction
 		scene = (Scene)new Intro() {
+			private static final long serialVersionUID = 2325979941361801002L;
 			@Override
 			public Scene next() {
 				Scene next_scene = super.next();

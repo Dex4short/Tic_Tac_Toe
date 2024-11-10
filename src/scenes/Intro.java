@@ -12,11 +12,11 @@ import interfaces.Scene;
 import res.Resource;
 import sound.Sound;
 
-public class Intro implements Scene{
+public class Intro extends Rectangle implements Scene{
+	private static final long serialVersionUID = 7857200382659259793L;
 	private final int img_w=200, img_h=200;
 	private Image logo;
 	private int r=0,g=0,b=0,a=255,i=-2;
-	private Rectangle bounds;
 	private boolean end;
 	
 
@@ -26,12 +26,12 @@ public class Intro implements Scene{
 	}
 	@Override
 	public void draw(Graphics2D g2d) {
-		bounds = g2d.getClipBounds();
+		setBounds(g2d.getClipBounds());
 		
 		g2d.setColor(Color.white);
-		g2d.fill(bounds);
+		g2d.fillRect(x, y, width, height);
 		
-		g2d.drawImage(logo, (bounds.width/2) - (img_w/2), (bounds.height/2) - (img_h/2) ,img_w, img_h, null);
+		g2d.drawImage(logo, (width/2) - (img_w/2), (height/2) - (img_h/2) ,img_w, img_h, null);
 		
 		g2d.setColor(new Color(r,g,b,a));
 		if(!end) {

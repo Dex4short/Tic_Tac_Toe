@@ -2,6 +2,7 @@ package scenes;
 
 import java.awt.AWTEvent;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 
 import default_package.Game;
@@ -14,7 +15,8 @@ import interfaces.Scene;
 import objects.GamePlay;
 import sound.Sound;
 
-public class MainMenu implements Scene{
+public class MainMenu extends Rectangle implements Scene{
+	private static final long serialVersionUID = 7186429339437146539L;
 	private Drawable background, title, menu_selection;
 	private Scene next_scene;
 
@@ -42,11 +44,11 @@ public class MainMenu implements Scene{
 		Sound.playOnMainMenu();
 	}
 	@Override
-	public void draw(Graphics2D g2d) {		
+	public void draw(Graphics2D g2d) {
+		setBounds(g2d.getClipBounds());
+		
 		background.draw(g2d);
-		
 		title.draw(g2d);
-		
 		menu_selection.draw(g2d);
 	}
 	@Override
@@ -61,7 +63,7 @@ public class MainMenu implements Scene{
 			ComponentEvent e = (ComponentEvent)event;
 			
 			if(e.getID() == ComponentEvent.COMPONENT_RESIZED) {
-				onResized(Settings.W, Settings.H);
+				onResized(width, height);
 			}
 		}
 	}

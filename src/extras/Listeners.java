@@ -8,6 +8,7 @@ import interfaces.ButtonModel;
 public class Listeners {
 
 	private Listeners() {
+		
 	}
 	public static void listen(AWTEvent event, ButtonModel btn_model) {
 		if(event instanceof MouseEvent) {
