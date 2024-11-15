@@ -9,6 +9,7 @@ import enums.Direction;
 import enums.GridType;
 import enums.Orientation;
 import enums.Symbol;
+import extras.Metrics;
 import interfaces.Drawable;
 import sound.Sound;
 
@@ -84,7 +85,7 @@ public abstract class TicTacToeBoard extends Rectangle implements Drawable{
 		return null;
 	}
 	public void next() {
-		check_grid(getNextSymbol());
+		doDashLine(getNextSymbol());
 		next = 1 - next;
 		onNext(next);
 	}
@@ -113,21 +114,32 @@ public abstract class TicTacToeBoard extends Rectangle implements Drawable{
 		
 		return completed;
 	}
+	public static int board_x, board_y, board_size;
+	public static void preferBoardSize(int screen_width, int screen_height) {
+		board_x = (screen_width/2) - (board_size/2);
+		board_y = (screen_height/2) - (board_size/2);
+		board_size = (int) (Metrics.rectLength(screen_width, screen_height)/3);
+	}
+	public static Rectangle preferedBoardRect() {
+		return new Rectangle(board_x, board_y, board_size, board_size);
+	}
+	public void doDashLine(Symbol symbol) {
+		checking = true;
+		for(int r=0; r<rows; r++) {
+			for(int c=0; c<cols; c++) {			
+				forEachDirectionOf(r, c, symbol);
+			}
+		}
+		checking = false;
+	}
+	public void resetDashLines() {
+		lines.clear();
+	}
 	
 	public abstract void onNext(int next);
 	public abstract void onCheck();
 	
-	private void check_grid(Symbol symbol) {
-		checking = true;
-		
-		for(int r=0; r<rows; r++) {
-			for(int c=0; c<cols; c++) {				
-				forEachDirectionOf(r, c, symbol);
-			}
-		}
 
-		checking = false;
-	}
 	private void forEachDirectionOf(int r, int c, Symbol symbol) {
 		for(Direction direction: Direction.values()) {
 			if(check_line(0, r, c, symbol, direction)) {

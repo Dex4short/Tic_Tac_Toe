@@ -28,8 +28,6 @@ public class Challenge extends Rectangle implements Challengable, Drawable, AWTE
 	@Override
 	public void onChallengeAccepted(Player player) {}
 	@Override
-	public void onApplyChallenge(TicTacToeBoard board) {}
-	@Override
 	public void onGameStart() {}
 	@Override
 	public void onPlayGame() {}

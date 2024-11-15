@@ -2,6 +2,7 @@ package scenes;
 
 import java.awt.AWTEvent;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 import default_package.Game;
@@ -13,10 +14,10 @@ import drawables.Card;
 import drawables.Challenge;
 import drawables.Challenge_BombAttack;
 import drawables.Challenge_FastPlay;
-import drawables.Roullet;
+import drawables.Roulett;
 import drawables.TicTacToeBoard;
-import enums.BombPowerUp;
 import enums.GridType;
+import enums.Symbol;
 import extras.Metrics;
 import extras.Timing;
 import interfaces.GameLifeLine;
@@ -36,7 +37,7 @@ public class PlayScene extends Rectangle implements Scene, GameLifeLine{
 	private TicTacToeBoard ticTacToe_board;
 	private ButtonPause pause_btn;
 	private Dialog pause_dialog, gameOver_dialog;
-	private Roullet roullet;
+	private Roulett roullet;
 	private Challenge challenge;
 	
 	private Scene next_scene;
@@ -63,35 +64,42 @@ public class PlayScene extends Rectangle implements Scene, GameLifeLine{
 		
 		gameStart();
 	}
-	private int board_x, board_y, board_size,roullet_size;
+	private int roullet_size;
 	@Override
 	public void draw(Graphics2D g2d) {
 		setBounds(g2d.getClipBounds());
-		
-		board_x = (width/2) - (board_size/2);
-		board_y = (height/2) - (board_size/2);
-		board_size = Metrics.rectLength(width, height)/3;
+		TicTacToeBoard.preferBoardSize(width, height);
 		
 		g2d.setColor(Resource.main_color[1].darker());
 		g2d.fillRect(x, y, width, height);
 		
 		if(roullet.isStoped()) {
-			ticTacToe_board.setBounds(board_x, board_y, board_size, board_size);
+			ticTacToe_board.setBounds(TicTacToeBoard.preferedBoardRect());
 			ticTacToe_board.draw(g2d);
 			
 			pause_btn.setBounds((width/2) - 25, 10, 50, 50);
 			pause_btn.draw(g2d);
 
-			player[0].getScore().setBounds(board_x, 10, (board_size/2) - 25, 50);
+			player[0].getScore().setBounds(TicTacToeBoard.board_x, 10, (TicTacToeBoard.board_size/2) - 25, 50);
 			player[0].getScore().draw(g2d);
 
-			player[1].getScore().setBounds(pause_btn.x + pause_btn.width, 10, (board_size/2) - 25, 50);
+			player[1].getScore().setBounds(pause_btn.x + pause_btn.width, 10, (TicTacToeBoard.board_size/2) - 25, 50);
 			player[1].getScore().draw(g2d);
 
-			player[0].getNameTag().setBounds(board_x / 8, board_y + board_size, (board_x / 8) * 6, board_y);
+			player[0].getNameTag().setBounds(
+					TicTacToeBoard.board_x / 8, 
+					TicTacToeBoard.board_y + TicTacToeBoard.board_size, 
+					(TicTacToeBoard.board_x / 8) * 6, 
+					TicTacToeBoard.board_y
+			);
 			player[0].getNameTag().draw(g2d);
 
-			player[1].getNameTag().setBounds(board_x + board_size + (board_x / 8), board_y + board_size, (board_x / 8) * 6, board_y);
+			player[1].getNameTag().setBounds(
+					TicTacToeBoard.board_x + TicTacToeBoard.board_size + (TicTacToeBoard.board_x / 8),
+					TicTacToeBoard.board_y + TicTacToeBoard.board_size,
+					(TicTacToeBoard.board_x / 8) * 6,
+					TicTacToeBoard.board_y
+			);
 			player[1].getNameTag().draw(g2d);
 
 			if(challenge != null) {
@@ -100,7 +108,7 @@ public class PlayScene extends Rectangle implements Scene, GameLifeLine{
 			}
 		}
 		else{
-			roullet_size = Metrics.rectLength(width, height)/2;
+			roullet_size = (int)Metrics.rectLength(width, height)/2;
 			roullet.setBounds(width/2, height/2, roullet_size, roullet_size);
 			roullet.draw(g2d);
 		}
@@ -138,7 +146,7 @@ public class PlayScene extends Rectangle implements Scene, GameLifeLine{
 	}
 	@Override
 	public void onGameStart() {
-		roullet = new Roullet(game_play.getGame_mode()) {
+		roullet = new Roulett(game_play.getGame_mode()) {
 			private static final long serialVersionUID = -6257683198736734735L;
 			@Override
 			public void onRoulletStopped() {
@@ -161,7 +169,6 @@ public class PlayScene extends Rectangle implements Scene, GameLifeLine{
 	}
 	@Override
 	public void onPlayGame() {
-		if(challenge != null) challenge.applyChallenge(ticTacToe_board);
 		player[next_turn].myTurn(true);
 		if(challenge != null) challenge.acceptChallenge(player[next_turn]);
 	}
@@ -345,7 +352,6 @@ public class PlayScene extends Rectangle implements Scene, GameLifeLine{
 	
 	private class FastPlay extends Challenge_FastPlay{
 		private static final long serialVersionUID = 555815801224650379L;
-		
 		public FastPlay() {
 			super(player[0], player[1]);
 		}
@@ -356,13 +362,26 @@ public class PlayScene extends Rectangle implements Scene, GameLifeLine{
 	}
 	private class BombAttack extends Challenge_BombAttack{
 		private static final long serialVersionUID = 1L;
-		
 		public BombAttack() {
 			super(player[0], player[1]);
 		}
 		@Override
 		public void onDetonateBomb(Card bomb_card) {
+			for(Point point: bomb_card.getPowerUp().explosionPoints()) {
+				if(ticTacToe_board.getBox(point.x, point.y) != null) {
+					ticTacToe_board.getBox(point.x, point.y).setHighlighted(false);
+					ticTacToe_board.getBox(point.x, point.y).setSymbol(null);
+				}
+			}
+
+			player[0].getScore().setAmount(0);
+			player[1].getScore().setAmount(0);
 			
+			ticTacToe_board.resetDashLines();
+			ticTacToe_board.doDashLine(Symbol.O);
+			ticTacToe_board.doDashLine(Symbol.X);
+			
+			ticTacToe_board.next();
 		}
 	}
 }

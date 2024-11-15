@@ -8,22 +8,17 @@ import java.awt.Rectangle;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
-import java.util.Random;
-
-import enums.BombPowerUp;
-import extras.Metrics;
 import extras.RGBA;
 import interfaces.Drawable;
 import res.Resource;
 
 public abstract class CardSlot extends Rectangle implements Drawable, AWTEventListener{
 	private static final long serialVersionUID = 6184563525362625381L;
-	private Card deck[][], selected_card, temp_card;
+	private Card cards[][], selected_card, temp_card;
 	private BasicStroke stroke, default_stroke;
 	private Color deck_bgcolor;
 	private RoundRectangle2D card_slot[][];
-	private float card_scale;
-	private int card_w, card_h, next_deck=-1, next_slot=-1;
+	private int next_set=-1, next_slot=-1, next_user=1;
 
 	public CardSlot() {
 		stroke = new BasicStroke(10);
@@ -36,122 +31,157 @@ public abstract class CardSlot extends Rectangle implements Drawable, AWTEventLi
 			}
 		}
 		
-		deck = new Card[2][2];
-		Random r = new Random();
-		deck[0][0] = new Card(BombPowerUp.values()[r.nextInt(8)]);
-		deck[0][1] = new Card(BombPowerUp.values()[r.nextInt(8)]);
-		deck[1][0] = new Card(BombPowerUp.values()[r.nextInt(8)]);
-		deck[1][1] = new Card(BombPowerUp.values()[r.nextInt(8)]);
+		cards = new Card[2][2];
+		//Random r = new Random();
+		cards[0][0] = null; //new Card(BombPowerUp.values()[r.nextInt(8)])
+		cards[0][1] = null;
+		cards[1][0] = null;
+		cards[1][1] = null;
+		
+		//cards[0][0].faceBack();
+		//cards[0][1].faceBack();
 	}
-	private int d,s,card_x,card_y;
+	private int st,sl,card_x,card_y;
 	@Override
 	public void draw(Graphics2D g2d) {
-		card_scale = Metrics.rectLength(width, height) / 1000f;
-		card_w = Math.round( 70 * card_scale);
-		card_h = Math.round(106 * card_scale);
-
 		g2d.setColor(deck_bgcolor);
 		//cards
-		for(d=0; d<2; d++) {//deck
-			for(s=0; s<2; s++) {//slots
-				card_x = x + (width/(8-s)) + ((width/(8-s))*((6-s)*d)) - (card_w/2);
-				card_y = y + (height/(5-s)) - (card_h/2);
+		for(st=0; st<2; st++) {//sets
+			for(sl=0; sl<2; sl++) {//slots
+				card_x = x + (width/(8-sl)) + ((width/(8-sl))*((6-sl)*st)) - (Card.card_w/2);
+				card_y = y + (height/(5-sl)) - (Card.card_h/2);
 				
-				if(d==next_deck && s==next_slot && selected_card==null) {
-					g2d.setStroke(stroke);
-					g2d.drawRoundRect(card_x, card_y, card_w, card_h, 10, 10);
+				if(selected_card==null) {
+					if(st==next_set && sl==next_slot) {
+						g2d.setStroke(stroke);
+						g2d.drawRoundRect(card_x, card_y, Card.card_w, Card.card_h, 10, 10);
+					}
+				}
+				else {
+					if(selected_card.isActivated()) {
+						popCard();
+					}
 				}
 
-				card_slot[d][s].setRoundRect(card_x, card_y, card_w, card_h, 10, 10);
-				g2d.fill(card_slot[d][s]);
-				if(deck[d][s] != null) {
-					if(deck[d][s] != selected_card) {
-						deck[d][s].setBounds(card_x, card_y, card_w, card_h);
+				card_slot[st][sl].setRoundRect(card_x, card_y, Card.card_w, Card.card_h, 10, 10);
+				g2d.fill(card_slot[st][sl]);
+				if(cards[st][sl] != null) {
+					if(cards[st][sl] != selected_card) {
+						cards[st][sl].setBounds(card_x, card_y, Card.card_w, Card.card_h);
 					}
-					g2d.drawImage(
-							deck[d][s].getBomb_card().img, 
-							deck[d][s].x, 
-							deck[d][s].y,
-							deck[d][s].width, 
-							deck[d][s].height,
-							null
-					);
+					cards[st][sl].draw(g2d);
 				}
 				
-				if(d==next_deck && s==next_slot) {
+				if(st==next_set && sl==next_slot) {
 					g2d.setStroke(default_stroke);
 				}
 			}
 		}
 	}
-	private int nd,ns;
+	private int n_st,n_sl;
 	@Override
-	public void eventDispatched(AWTEvent event) {
-		if(event instanceof MouseEvent) {
+	public void eventDispatched(AWTEvent event) {		
+		if(event instanceof MouseEvent) {			
 			MouseEvent e = (MouseEvent)event;
 			
-			if(e.getID() == MouseEvent.MOUSE_PRESSED) {
-				if(next_slot==1) {
-					selectCard(deck[next_deck][1]);
-				}
-			}
-			else if(e.getID() == MouseEvent.MOUSE_MOVED) {
+			if(e.getID() == MouseEvent.MOUSE_MOVED) {
 				if(selected_card == null) {
-					next_deck = -1;
+					next_set = next_user;
 					next_slot = -1;
-					for(nd=0; nd<2; nd++) {//deck
-						for(ns=0; ns<2; ns++) {//slots
-							if(deck[nd][ns].contains(e.getPoint())) {
-								next_deck = nd;
-								next_slot = ns;
+					for(n_st=0; n_st<2; n_st++) {//next_set
+						if(n_st != next_user) {
+							continue;
+						}
+						for(n_sl=0; n_sl<2; n_sl++) {//next_slot
+							if(card_slot[n_st][n_sl].contains(e.getPoint())) {
+								next_set = n_st;
+								next_slot = n_sl;
 							}
 						}
 					}
 				}
 			}
-			else if(e.getID() == MouseEvent.MOUSE_RELEASED) {
-				for(nd=0; nd<2; nd++) {//deck
-					for(ns=0; ns<2; ns++) {//slots
-						if(card_slot[nd][ns].contains(e.getPoint()) && next_deck==nd && next_slot==ns) {
-							selectCard(null);
-							return;
-						}
+			else if(e.getID() == MouseEvent.MOUSE_PRESSED) {
+				if(next_set==next_user) {
+					if(next_slot==1) {
+						select_card(cards[next_set][1]);
 					}
-				}
-				if(!getTicTacToeBoard().contains(e.getPoint())) {
-					selectCard(null);
-				}
-				else{
-					placeCard();
-				}
-			}
-			else if(e.getID() == MouseEvent.MOUSE_CLICKED) {
-				if(next_deck!=-1 && next_slot==0) {
-					swapCard();
 				}
 			}
 			else if(e.getID() == MouseEvent.MOUSE_DRAGGED) {
 				if(selected_card != null) {
-					selected_card.setLocation(e.getX()-(card_w/2), e.getY()-(card_h/2));
+					selected_card.setLocation(e.getX()-(Card.card_w/2), e.getY()-(Card.card_h/2));
+				}
+			}
+			else if(e.getID() == MouseEvent.MOUSE_RELEASED) {
+				if(selected_card != null) {
+					if(TicTacToeBoard.preferedBoardRect().contains(e.getPoint())) {
+						activateCard(selected_card);
+					}
+					else{
+						select_card(null);
+					}
+				}
+				else if(next_set == next_user && next_slot!=-1) {
+					if(card_slot[next_set][next_slot].contains(e.getPoint())) {
+						select_card(null);
+						return;
+					}
+				}
+			}
+			else if(e.getID() == MouseEvent.MOUSE_CLICKED) {
+				if(next_set == next_user) {
+					if(next_slot==0) {
+						swapCards(next_set);
+					}
 				}
 			}
 		}
 	}
+	public void flipCards() {
+		for(Card card_set[]: cards) {
+			for(Card card: card_set) {
+				if(card!=null) {
+					if(card.isFacedFront()) {
+						card.flipBack();
+					}
+					else{
+						card.flipFront();
+					}
+				}
+			}
+		}
+		next_user = 1 - next_user;
+		onFlipCards();
+	}
 	public Card getSelectedBombCard() {
 		return selected_card;
 	}
-	public void selectCard(Card card) {
+	public void activateCard(Card card) {
+		if(card != null) {
+			card.activate();
+			onActivateCard(card);
+		}
+	}
+	public void swapCards(int next_set) {
+		temp_card = cards[next_set][0];
+		cards[next_set][0] = cards[next_set][1];
+		cards[next_set][1] = temp_card;
+	}
+	public void popCard() {
+		selected_card = null;
+		cards[1-next_user][1] = null;
+		swapCards(1-next_user);
+	}
+	public void pushCard(Card card) {
+		swapCards(next_user);
+		cards[next_user][1] = card;
+	}
+	
+	public abstract void onFlipCards();
+	public abstract void onActivateCard(Card card);
+	
+	private void select_card(Card card) {
 		selected_card = card;
 	}
-	public void swapCard() {
-		temp_card = deck[next_deck][0];
-		deck[next_deck][0] = deck[next_deck][1];
-		deck[next_deck][1] = temp_card;
-	}
-	public void placeCard() {
-		
-	}
-	
-	public abstract TicTacToeBoard getTicTacToeBoard();
-	
 }

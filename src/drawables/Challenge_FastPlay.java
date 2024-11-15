@@ -37,10 +37,6 @@ public abstract class Challenge_FastPlay extends Challenge{
 		countDown_timer.restart();
 	}
 	@Override
-	public void onApplyChallenge(TicTacToeBoard board) {
-		countDown_timer.stop();
-	}
-	@Override
 	public void onGameStart() {
 		countDown_timer.start();
 	}

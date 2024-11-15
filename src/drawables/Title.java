@@ -31,7 +31,7 @@ public class Title extends Rectangle implements Drawable{
 	@Override
 	public void draw(Graphics2D g2d) {
 		if(execute_once) {
-			font_size  = Metrics.rectLength(800, 600) / 8;
+			font_size  = (int) (Metrics.rectLength(800, 600) / 8);
 			font       = new Font("Kreativ", Font.BOLD, (int)(font_size));
 
 			g2d.setFont(font);
