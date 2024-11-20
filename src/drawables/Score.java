@@ -29,4 +29,7 @@ public class Score extends Rectangle implements Drawable{
 	public int getAmount() {
 		return amount;
 	}
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
 }

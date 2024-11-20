@@ -338,4 +338,16 @@ public class Sound {
             }
         }).start();
     }
+    
+    public static void playOnSwapCards() {
+    	
+    }
+    
+    public static void playOnFlipCard() {
+    	
+    }
+    
+    public static void playOnExplode() {
+    	
+    }
 }

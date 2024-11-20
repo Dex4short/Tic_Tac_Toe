@@ -6,13 +6,12 @@ import enums.Symbol;
 public class AI_Easy extends AI_TicTacToe {
 
     public AI_Easy() {
-        super();
+    	
     }
-
     @Override
     public AI_Move onMakeMove(TicTacToeBoard tictactoe_board, int rows, int cols) {
         // Check if AI can win in the next move
-        AI_Move winningMove = findWinningMove(AI, rows, cols);
+        AI_Move winningMove = findWinningMove(Ai, rows, cols);
         if (winningMove != null) {
             return winningMove;
         }

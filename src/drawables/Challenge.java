@@ -5,30 +5,45 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.AWTEventListener;
 
+import ai.AI_BombAttack;
+import ai.AI_BombAttack_Easy;
+import interfaces.Action;
 import interfaces.Challengable;
 import interfaces.Drawable;
 import interfaces.GameLifeLine;
-import interfaces.Updatable;
 import objects.Player;
+import scenes.PlayScene;
 
-public class Challenge extends Rectangle implements Challengable, Drawable, AWTEventListener, Updatable, GameLifeLine{
+public class Challenge extends Rectangle implements Challengable, Drawable, AWTEventListener, Action, GameLifeLine{
 	private static final long serialVersionUID = 5520762618902077387L;
 	private Player challenger1, challenger2;
-
+	public AI_BombAttack ai_powerup;
+	
 	public Challenge(Player challenger1, Player challenger2) {
 		this.challenger1 = challenger1;
 		this.challenger2 = challenger2;
+		
+		switch(PlayScene.game_play.getDifficulty()) {
+		case Easy:
+			ai_powerup = new AI_BombAttack_Easy();
+			break;
+		case Hard:
+			
+			break;
+		case Normal:
+			
+			break;
+		}
+		
 	}
 	@Override
 	public void draw(Graphics2D g2d) {}
 	@Override
 	public void eventDispatched(AWTEvent event) {}
 	@Override
-	public void onUpdate(int update_code) {}
+	public void onAction() {}
 	@Override
 	public void onChallengeAccepted(Player player) {}
-	@Override
-	public void onApplyChallenge(TicTacToeBoard board) {}
 	@Override
 	public void onGameStart() {}
 	@Override

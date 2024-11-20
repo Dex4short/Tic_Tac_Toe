@@ -7,22 +7,22 @@ import java.util.List;
 import java.util.Random;
 
 public class AI_Normal extends AI_TicTacToe {
-    private final Random random = new Random();
+    private final Random random = new Random(); 
 
     public AI_Normal() {
-        super();
+    	
     }
 
     @Override
     public AI_Move onMakeMove(TicTacToeBoard tictactoe_board, int rows, int cols) {
         // Check if AI can win in the next move
-        AI_Move winningMove = findWinningMove(AI, rows, cols);
+        AI_Move winningMove = findWinningMove(Ai, rows, cols);
         if (winningMove != null) {
             return winningMove;
         }
 
         // Check if AI needs to block the player's winning move
-        AI_Move blockingMove = findWinningMove(PLAYER, rows, cols);
+        AI_Move blockingMove = findWinningMove(Player, rows, cols);
         if (blockingMove != null) {
             return blockingMove;
         }

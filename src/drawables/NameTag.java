@@ -8,7 +8,7 @@ import java.awt.Rectangle;
 import interfaces.Drawable;
 import res.Resource;
 
-public class NameTag extends Rectangle implements Drawable{
+public abstract class NameTag extends Rectangle implements Drawable{
 	private static final long serialVersionUID = -8526841904725307929L;
 	private String name;
 	private Color color;
@@ -68,6 +68,12 @@ public class NameTag extends Rectangle implements Drawable{
 				y_translate = (int)(Math.sin(Math.toRadians(y_deg)) * height);
 			}
 			else {
+				if(y_deg >= 90) {
+					onHidden();
+				}
+				else{
+					onShown();
+				}
 				y_iterate = 0;
 			}
 		}
@@ -90,4 +96,7 @@ public class NameTag extends Rectangle implements Drawable{
 	public void hide() {
 		y_iterate = 3;
 	}
+	
+	public abstract void onShown();
+	public abstract void onHidden();
 }

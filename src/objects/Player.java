@@ -3,15 +3,26 @@ package objects;
 import drawables.NameTag;
 import drawables.Score;
 import drawables.TicTacToeBoard;
+import enums.Symbol;
 
 public abstract class Player{
 	private Score score;
 	private NameTag name_tag;
+	private Symbol assigned_symbol;
 	private boolean myTurn;
 
 	public Player(String name) {
 		score = new Score();
-		name_tag = new NameTag(name);
+		name_tag = new NameTag(name) {
+			private static final long serialVersionUID = 8532937625774334911L;
+			@Override
+			public void onShown() {
+				onMyTurn();
+				myTurn = true;
+			}
+			@Override
+			public void onHidden() {}
+		};
 		
 		setName(name);
 	}
@@ -21,18 +32,22 @@ public abstract class Player{
 	public void setName(String name) {
 		name_tag.setName(name);
 	}
+	public Symbol getAssignedSymbol() {
+		return assigned_symbol;
+	}
+	public void setAssignedSymbol(Symbol assigned_symbol) {
+		this.assigned_symbol = assigned_symbol;
+	}
 	public boolean isMyTurn() {
 		return myTurn;
 	}
 	public void myTurn(boolean myTurn) {
-		this.myTurn = myTurn;
-		
-		if(isMyTurn()) {
+		if(myTurn) {
 			System.out.println(name_tag.getName() + "'s turn");
 			name_tag.show();
-			onMyTurn();
 		}
 		else {
+			myTurn = false;
 			name_tag.hide();
 		}
 	}

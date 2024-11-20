@@ -9,12 +9,12 @@ public class AI_Hard extends AI_TicTacToe {
     private HashMap<String, Integer> memo; // Cache for board evaluations
 
     public AI_Hard() {
-        memo = new HashMap<>();
+    	
     }
-
     @Override
     public AI_Move onMakeMove(TicTacToeBoard tictactoe_board, int rows, int cols) {
-        if (isBoardEmpty(tictactoe_board, rows, cols)) {
+        memo = new HashMap<>();
+        if (tictactoe_board.isBoardEmpty()) {
             return randomMove(tictactoe_board, rows, cols);
         } else {
             return bestMove(tictactoe_board, rows, cols);
@@ -30,7 +30,7 @@ public class AI_Hard extends AI_TicTacToe {
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 if (board[row][col] == null) {
-                    board[row][col] = AI;
+                    board[row][col] = Ai;
                     int score = minimax(board, 0, false, alpha, beta, rows, cols);
                     board[row][col] = null;
 
@@ -59,7 +59,7 @@ public class AI_Hard extends AI_TicTacToe {
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 if (board[row][col] == null) {
-                    board[row][col] = isMaximizing ? AI : PLAYER;
+                    board[row][col] = isMaximizing ? Ai : Player;
                     int currentScore = minimax(board, depth + 1, !isMaximizing, alpha, beta, rows, cols);
                     board[row][col] = null;
 
@@ -102,7 +102,7 @@ public class AI_Hard extends AI_TicTacToe {
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 if (checkRow(row, col, rows, cols)) {
-                    return board[row][col] == AI ? 10 : -10;
+                    return board[row][col] == Ai ? 10 : -10;
                 }
             }
         }

@@ -16,7 +16,6 @@ public class Window extends JFrame implements WindowListener{
 		setContentPane(game);
 		
 		game.start();//game Loop here
-		
 	}
 	@Override
 	public void windowOpened(WindowEvent e) {}

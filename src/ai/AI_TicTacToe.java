@@ -5,34 +5,32 @@ import java.util.Random;
 import drawables.TicTacToeBoard;
 import enums.Symbol;
 
-public class AI_TicTacToe {
+public class AI_TicTacToe{
     public Symbol board[][];
-    public Symbol PLAYER;
-    public Symbol AI;
-    public Symbol assigned_symbol;
+    public Symbol Player;
+    public Symbol Ai;
     
     public AI_TicTacToe() {
     	
 	}
-    public AI_Move make_move(TicTacToeBoard tictactoe_board) {
+    public AI_Move make_move(TicTacToeBoard tictactoe_board, Symbol assigned_symbol) {
     	int
     	rows = tictactoe_board.getRows(),
     	cols = tictactoe_board.getColumns();
+
+    	Ai = assigned_symbol;
+    	if(Ai == Symbol.X) {
+    		Player = Symbol.O;
+    	}
+    	else {
+    		Player = Symbol.X;
+    	}
     	
     	board = new Symbol[rows][cols];
     	for(int r=0; r<rows; r++) {
     		for(int c=0; c<cols; c++) {
     			board[r][c] = tictactoe_board.getBox(r, c).getSymbol();
     		}
-    	}
-    	
-    	assigned_symbol = tictactoe_board.getNextSymbol();
-    	AI = assigned_symbol;
-    	if(assigned_symbol == Symbol.X) {
-    		PLAYER = Symbol.O;
-    	}
-    	else {
-    		PLAYER = Symbol.X;
     	}
     	
 		return onMakeMove(tictactoe_board, rows, cols);
@@ -46,7 +44,7 @@ public class AI_TicTacToe {
     	moveRow = random.nextInt(rows),
     	moveCol = random.nextInt(cols);
 
-    	if(isBoardHasVacant(tictactoe_board, rows, cols)) {
+    	if(tictactoe_board.isBoardHasVacant()) {
         	while(tictactoe_board.getBox(moveRow, moveCol).getSymbol() != null) {
             	moveRow = random.nextInt(rows);
             	moveCol = random.nextInt(cols);
@@ -55,25 +53,5 @@ public class AI_TicTacToe {
     	}
     	
     	return null;
-    }    
-    public boolean isBoardEmpty(TicTacToeBoard tictactoe_board, int rows, int cols) {
-    	for(int r=0; r<rows; r++) {
-    		for(int c=0; c<cols; c++) {
-    			if(tictactoe_board.getBox(r, c).getSymbol() != null) {
-    				return false;
-    			}
-    		}
-    	}
-    	return true;
-    }
-    public boolean isBoardHasVacant(TicTacToeBoard tictactoe_board, int rows, int cols) {
-    	for(int r=0; r<rows; r++) {
-    		for(int c=0; c<cols; c++) {
-    			if(tictactoe_board.getBox(r, c).getSymbol() == null) {
-    				return true;
-    			}
-    		}
-    	}
-    	return false;
     }
 }
