@@ -15,7 +15,6 @@ public class Sound {
     private static AdvancedPlayer inGamePlayer;
     private static boolean isInGamePlaying = false;
 
-
     public Sound() { }
 
     public static void playOnIntro() {

@@ -2,9 +2,12 @@ package drawables;
 
 import java.awt.BasicStroke;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.io.File;
+import java.io.IOException;
 
 import extras.Metrics;
 import extras.Shapes;
@@ -16,29 +19,38 @@ public class Title extends Rectangle implements Drawable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1992544474973826931L;
-	private int title_w, title_h, font_size, bx, by, bar_size, bar_gap=1 ,bar_arc=5, bar_n=0;
 	private String title;
 	private Font font;
-	private Shape glyph;
 	private BasicStroke stroke;
+	private Shape glyph;
+	private int title_w, title_h, bx, by, bar_size, bar_gap=1 ,bar_arc=5, bar_n=0;
+	private float font_size;
 	private boolean execute_once;
 
 	public Title() {
 		title = "Tic Tac Toe";
 		stroke = new BasicStroke(5);
 		execute_once = true;
+		
+		try {
+			File file = new File(new Resource().get("Kreativ.otf").getPath());
+			font = Font.createFont(Font.TRUETYPE_FONT, file);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
 	}
 	@Override
 	public void draw(Graphics2D g2d) {
 		if(execute_once) {
-			font_size  = (int) (Metrics.rectLength(800, 600) / 8);
-			font       = new Font("Kreativ", Font.BOLD, (int)(font_size));
+			font_size = (float)(Metrics.rectLength(800, 600) / 8f);
+			font = font.deriveFont(font_size);
 
 			g2d.setFont(font);
-			title_w  = g2d.getFontMetrics().stringWidth(title);
-			title_h  = g2d.getFontMetrics().getAscent();
-			bar_size = font_size/5;
-			glyph    = Shapes.glyph(title, g2d);
+			title_w = g2d.getFontMetrics().stringWidth(title);
+			title_h = g2d.getFontMetrics().getAscent();
+			bar_size = (int)font_size/5;
+			glyph = Shapes.glyph(title, g2d);
 			
 			execute_once = false;
 		}

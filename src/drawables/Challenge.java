@@ -7,8 +7,6 @@ import java.awt.event.AWTEventListener;
 
 import ai.AI_BombAttack;
 import ai.AI_BombAttack_Easy;
-import ai.AI_BombAttack_Hard;
-import ai.AI_BombAttack_Normal;
 import interfaces.Action;
 import interfaces.Challengable;
 import interfaces.Drawable;
@@ -30,10 +28,10 @@ public class Challenge extends Rectangle implements Challengable, Drawable, AWTE
 			ai_powerup = new AI_BombAttack_Easy();
 			break;
 		case Hard:
-			ai_powerup = new AI_BombAttack_Normal();
+			
 			break;
 		case Normal:
-			ai_powerup = new AI_BombAttack_Hard();
+			
 			break;
 		}
 		

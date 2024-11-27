@@ -24,6 +24,7 @@ public class Resource {
 	};
 
 	public Resource() {
+		
 	}
 	public URL get(String file_name) {
 		return getClass().getResource(file_name);
