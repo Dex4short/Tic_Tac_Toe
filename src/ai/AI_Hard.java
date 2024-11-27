@@ -5,11 +5,11 @@ import enums.Symbol;
 import java.util.HashMap;
 
 public class AI_Hard extends AI_TicTacToe {
-    
+
     private HashMap<String, Integer> memo; // Cache for board evaluations
 
     public AI_Hard() {
-    	
+
     }
     @Override
     public AI_Move onMakeMove(TicTacToeBoard tictactoe_board, int rows, int cols) {
@@ -46,6 +46,7 @@ public class AI_Hard extends AI_TicTacToe {
     }
 
     private int minimax(Symbol[][] board, int depth, boolean isMaximizing, int alpha, int beta, int rows, int cols) {
+//        System.out.println("Calculating at depth:" + depth);
         String boardState = boardToString(board);
         if (memo.containsKey(boardState)) return memo.get(boardState);/// // Return cached result if available
 
@@ -112,19 +113,19 @@ public class AI_Hard extends AI_TicTacToe {
     private boolean checkRow(int row, int col, int rows, int cols) {
         Symbol symbol = board[row][col];
         if (symbol == null) return false;
-    
+
         // Check horizontal
         if (col + 2 < cols && board[row][col + 1] == symbol && board[row][col + 2] == symbol) return true;
-        
+
         // Check vertical
         if (row + 2 < rows && board[row + 1][col] == symbol && board[row + 2][col] == symbol) return true;
-        
+
         // Check diagonal (down-right)
         if (row + 2 < rows && col + 2 < cols && board[row + 1][col + 1] == symbol && board[row + 2][col + 2] == symbol) return true;
-        
+
         // Check anti-diagonal (down-left)
         if (row + 2 < rows && col - 2 >= 0 && board[row + 1][col - 1] == symbol && board[row + 2][col - 2] == symbol) return true;
-    
+
         return false;
     }
 }
