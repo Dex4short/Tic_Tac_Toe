@@ -9,8 +9,9 @@ public class Main {
 		Window w = new Window();
 		w.setSize(800, 600);
 		w.setMinimumSize(new Dimension(800,600));
-		w.setLocationRelativeTo(null);
 		w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		w.setLocationRelativeTo(null);
+		w.setResizable(false);
 		w.setVisible(true);
 	}
 }

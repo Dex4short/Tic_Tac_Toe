@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -29,6 +30,9 @@ public class Resource {
 	}
 	public URL get(String file_name) {
 		return getClass().getResource(file_name);
+	}
+	public InputStream getAsInputStream(String file_name) {
+		return getClass().getResourceAsStream(file_name);
 	}
 	public static Image getImage(String file_name) {
 		try {

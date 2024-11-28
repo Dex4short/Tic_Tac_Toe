@@ -1,9 +1,12 @@
 package default_package;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
 import javax.swing.JFrame;
+
+import res.Resource;
 
 public class Window extends JFrame implements WindowListener{
 	private static final long serialVersionUID = -8255319694373975038L;
@@ -11,6 +14,9 @@ public class Window extends JFrame implements WindowListener{
 
 	public Window() {
 		setTitle("Tic Tac Toe");
+		
+		Image img = Toolkit.getDefaultToolkit().getImage(new Resource().get("TicTacToe_Logo.png"));
+		setIconImage(img);
 		
 		game = new Game();
 		setContentPane(game);

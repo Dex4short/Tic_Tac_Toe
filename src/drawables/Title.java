@@ -2,12 +2,10 @@ package drawables;
 
 import java.awt.BasicStroke;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
 
 import extras.Metrics;
 import extras.Shapes;
@@ -33,8 +31,8 @@ public class Title extends Rectangle implements Drawable{
 		execute_once = true;
 		
 		try {
-			File file = new File(new Resource().get("Kreativ.otf").getPath());
-			font = Font.createFont(Font.TRUETYPE_FONT, file);
+			InputStream font_strem = new Resource().getAsInputStream("Kreativ.otf");
+			font = Font.createFont(Font.TRUETYPE_FONT, font_strem);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);
