@@ -20,7 +20,8 @@ public class Resource {
 			new Font("Calibri", Font.BOLD, 16),
 			new Font("Calibri", Font.BOLD, 24),
 			new Font("Calibri", Font.BOLD, 32),
-			new Font("Calibri", Font.BOLD, 64)
+			new Font("Calibri", Font.BOLD, 64),
+			new Font("Calibri", Font.ITALIC, 12)
 	};
 
 	public Resource() {

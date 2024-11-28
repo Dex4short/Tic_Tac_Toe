@@ -1,6 +1,7 @@
 package scenes;
 
 import java.awt.AWTEvent;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
@@ -19,10 +20,11 @@ public class MainMenu extends Rectangle implements Scene{
 	private static final long serialVersionUID = 7186429339437146539L;
 	private Drawable background, title, menu_selection;
 	private Scene next_scene;
+	private AboutScene about_scene;
 
 	public MainMenu() {
-		background     = new MenuBackground();
-		title 		   = new Title();
+		background = new MenuBackground();
+		title = new Title();
 		menu_selection = new MenuSelection() {
 			private static final long serialVersionUID = 2531560105775009568L;
 			@Override
@@ -36,9 +38,10 @@ public class MainMenu extends Rectangle implements Scene{
 			}
 			@Override
 			public void onAbout() {
-				//TODO
+				about_scene.show(true);
 			}
 		};
+		about_scene = new AboutScene();
 		onResized(Settings.W, Settings.H);
 		
 		Sound.playOnMainMenu();
@@ -46,10 +49,16 @@ public class MainMenu extends Rectangle implements Scene{
 	@Override
 	public void draw(Graphics2D g2d) {
 		setBounds(g2d.getClipBounds());
-		
 		background.draw(g2d);
-		title.draw(g2d);
-		menu_selection.draw(g2d);
+		
+		if(!about_scene.isShowing()) {
+			title.draw(g2d);
+			menu_selection.draw(g2d);
+		}
+		else {
+			about_scene.setBounds(x, y, width, height);
+			about_scene.draw(g2d);
+		}
 	}
 	@Override
 	public Scene next() {
@@ -57,14 +66,17 @@ public class MainMenu extends Rectangle implements Scene{
 	}
 	@Override
 	public void eventDispatched(AWTEvent event) {
-		((MenuSelection)menu_selection).eventDispatched(event);
-		
-		if(event instanceof ComponentEvent) {
-			ComponentEvent e = (ComponentEvent)event;
-			
-			if(e.getID() == ComponentEvent.COMPONENT_RESIZED) {
-				onResized(width, height);
+		if(!about_scene.isShowing()) {
+			((MenuSelection)menu_selection).eventDispatched(event);
+			if(event instanceof ComponentEvent) {
+				ComponentEvent e = (ComponentEvent)event;
+				if(e.getID() == ComponentEvent.COMPONENT_RESIZED) {
+					onResized(width, height);
+				}
 			}
+		}
+		else {
+			about_scene.eventDispatched(event);
 		}
 	}
 	public void onResized(int w, int h) {

@@ -13,7 +13,7 @@ public class AI_BombAttack_Easy extends AI_BombAttack{
 	public AI_Move onDoBombAttack(Player current_challenger, CardSlot card_slot) {
 		if(!card_slot.hasCurrentCard()) return null;//return null if no power up cards available
 		
-		boolean use_powerup = random.nextBoolean();
+		boolean use_powerup = random.nextInt(100) < 30;
 		if(!use_powerup) return null; //return null if ai decides not to use a power up
 		
 		if(card_slot.hasReservedCard()) {//check reserved card
@@ -39,7 +39,7 @@ public class AI_BombAttack_Easy extends AI_BombAttack{
 				box = current_challenger.getTicTacToeBoard().getBox(row, col);
 			}
 		}
-		System.out.println("target:" + row + ", " + col);
+		System.out.println("(easy)target:" + row + ", " + col);
 
 		card_slot.selectCurrentCard();//select current card in the first slot
 		

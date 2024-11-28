@@ -317,7 +317,6 @@ public abstract class MenuSelection extends Rectangle implements Drawable, AWTEv
 		public ButtonAbout() {
 			super("About");
 		}
-
 		@Override
 		public void onAction() {
 			onAbout();
