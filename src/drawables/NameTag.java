@@ -68,10 +68,12 @@ public abstract class NameTag extends Rectangle implements Drawable{
 				y_translate = (int)(Math.sin(Math.toRadians(y_deg)) * height);
 			}
 			else {
-				if(y_deg >= 90) {
+				if(y_deg>=90) {
+					y_deg=90;
 					onHidden();
 				}
-				else{
+				else if(y_deg<=0){
+					y_deg=0;
 					onShown();
 				}
 				y_iterate = 0;
