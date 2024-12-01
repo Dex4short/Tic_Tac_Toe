@@ -37,6 +37,7 @@ public abstract class Player{
 	}
 	public void setAssignedSymbol(Symbol assigned_symbol) {
 		this.assigned_symbol = assigned_symbol;
+		name_tag.setName(name_tag.getName() + " '" + assigned_symbol.toString() + "'");
 	}
 	public boolean isMyTurn() {
 		return myTurn;

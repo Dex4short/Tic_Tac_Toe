@@ -157,13 +157,13 @@ public abstract class TicTacToeBoard extends Rectangle implements Drawable{
 	}
 	
 	public abstract void onNext(int next);
-	public abstract void onCheck();
+	public abstract void onCheck(Symbol symbol);
 	
 
 	private void forEachDirectionOf(int r, int c, Symbol symbol) {
 		for(Direction direction: Direction.values()) {
 			if(check_line(0, r, c, symbol, direction)) {
-				addLine(new Line(this , r, c, direction));
+				addLine(new Line(this , r, c, direction), symbol);
 			}
 		}
 	}
@@ -172,11 +172,11 @@ public abstract class TicTacToeBoard extends Rectangle implements Drawable{
 	private void forEachOrientationOf(int r, int c, Symbol symbol) {
 		for(Orientation orientation: Orientation.values()) {
 			if(check_line(0, r, c, symbol, orientation)) {
-				addLine(new Line(this , r, c, orientation));
+				addLine(new Line(this , r, c, orientation), symbol);
 			}
 		}
 	}
-	private void addLine(Line line) {
+	private void addLine(Line line, Symbol symbol) {
 		for(Line l: lines) {
 			if(l.compare(line)) {
 				return;
@@ -184,7 +184,7 @@ public abstract class TicTacToeBoard extends Rectangle implements Drawable{
 		}
 		lines.add(line);
 		Sound.playOnLineDashed();
-		onCheck();
+		onCheck(symbol);
 	}
 	private boolean check_line(int n, int r, int c, Symbol symbol, Direction direction) {
 		if(n == 3) return true;

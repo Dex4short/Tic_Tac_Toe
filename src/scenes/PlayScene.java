@@ -244,8 +244,13 @@ public class PlayScene extends Rectangle implements Scene, GameLifeLine{
 				}
 			}
 			@Override
-			public void onCheck() {
-				player[next_turn].getScore().addAmount(1);
+			public void onCheck(Symbol symbol) {
+				if(player[0].getAssignedSymbol() == symbol) {
+					player[0].getScore().addAmount(1);
+				}
+				else {
+					player[1].getScore().addAmount(1);
+				}
 				Sound.playOnGainPoints();
 			}
 			public boolean isGrid3x3() {
@@ -392,6 +397,7 @@ public class PlayScene extends Rectangle implements Scene, GameLifeLine{
 					while(!bomb_card.isActivated()) {
 						new Timing().sleep(1000);
 					}
+					
 					System.out.println("bomb detonated");
 					ticTacToe_board.next();
 				};
