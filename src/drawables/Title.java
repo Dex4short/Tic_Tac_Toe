@@ -13,9 +13,6 @@ import interfaces.Drawable;
 import res.Resource;
 
 public class Title extends Rectangle implements Drawable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1992544474973826931L;
 	private String title;
 	private Font font;

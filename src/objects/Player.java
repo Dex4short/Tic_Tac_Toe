@@ -37,14 +37,13 @@ public abstract class Player{
 	}
 	public void setAssignedSymbol(Symbol assigned_symbol) {
 		this.assigned_symbol = assigned_symbol;
-		name_tag.setName(name_tag.getName() + " '" + assigned_symbol.toString() + "'");
+		name_tag.setAssignedSymbol(assigned_symbol);
 	}
 	public boolean isMyTurn() {
 		return myTurn;
 	}
 	public void myTurn(boolean myTurn) {
 		if(myTurn) {
-			System.out.println(name_tag.getName() + "'s turn");
 			name_tag.show();
 		}
 		else {

@@ -3,8 +3,10 @@ package drawables;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 
+import enums.Symbol;
 import interfaces.Drawable;
 import res.Resource;
 
@@ -13,6 +15,8 @@ public abstract class NameTag extends Rectangle implements Drawable{
 	private String name;
 	private Color color;
 	private BasicStroke stroke;
+	private Image img_symbol;
+	private Symbol assigned_symbol;
 	private int arc, y_translate, y_deg, y_iterate;
 
 	public NameTag(String name) {
@@ -49,6 +53,8 @@ public abstract class NameTag extends Rectangle implements Drawable{
 				arc/2,
 				arc/2
 		);
+		
+		g2d.drawImage(img_symbol, x+20, y+20, height-25, height-25, null);
 
 		g2d.setColor(Color.white);
 		g2d.setFont(Resource.font[1]);
@@ -85,6 +91,13 @@ public abstract class NameTag extends Rectangle implements Drawable{
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public Symbol getAssignedSymbol() {
+		return assigned_symbol;
+	}
+	public void setAssignedSymbol(Symbol assigned_symbol) {
+		this.assigned_symbol = assigned_symbol;
+		img_symbol = assigned_symbol.img;
 	}
 	public Color getColor() {
 		return color;
